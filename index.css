@@ -335,8 +335,17 @@ main {
   transition: transform 0.6s ease;
 }
 
+.image-container.contain-img .slide-image {
+  object-fit: contain;
+  padding: 0.5rem;
+}
+
 .image-container:hover .slide-image {
   transform: scale(1.03);
+}
+
+.image-container.contain-img:hover .slide-image {
+  transform: scale(1.01);
 }
 
 /* Glass Card Overlay for Interactivity */
