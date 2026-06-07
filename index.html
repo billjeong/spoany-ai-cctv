@@ -1,0 +1,647 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스포애니 AI 혼잡도 안내 시스템 도입 제안서</title>
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-text"><span>SPOANY</span> <span>AI</span></div>
+      <div class="logo-badge">VISION HUB</div>
+    </div>
+    
+    <div class="mode-toggle">
+      <button class="toggle-btn active" id="btn-mode-pitch">제안 발표 슬라이드</button>
+      <button class="toggle-btn" id="btn-mode-dashboard">실시간 AI 관제 대시보드</button>
+    </div>
+    
+    <div class="nav-controls" id="slide-nav-controls">
+      <button class="nav-btn" id="btn-prev" aria-label="이전 슬라이드">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>
+      </button>
+      <div class="slide-indicator" id="slide-indicator">1 / 7</div>
+      <button class="nav-btn" id="btn-next" aria-label="다음 슬라이드">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"></polyline></svg>
+      </button>
+    </div>
+  </header>
+
+  <!-- Main Body -->
+  <main>
+    
+    <!-- Pitch Slides Section -->
+    <div class="slides-wrapper" id="pitch-container">
+      <div class="slide-deck">
+        
+        <!-- SLIDE 1: Title -->
+        <div class="slide active" id="slide-1">
+          <div class="slide-info">
+            <span class="hero-tag">온디바이스 AI 혁신 제안</span>
+            <span class="slide-number">SLIDE 01 / INTRODUCTION</span>
+            <h1 class="slide-title">"지금 가도<br>바로 뛸 수 있을까?"</h1>
+            <p class="slide-description">
+              회원들의 일상적 의문에 응답하다. 국내 최대 직영 피트니스 브랜드 스포애니(Spoany)의 
+              공간과 기술을 결합하여, 고객 만족과 재등록률을 획기적으로 견인할 온디바이스 AI 혼잡도 안내 시스템을 제안합니다.
+            </p>
+            <div class="hero-btns">
+              <button class="btn-primary" id="btn-start-pitch">
+                제안서 시작하기
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"></line><polyline points="12 5 19 12 12 19"></polyline></svg>
+              </button>
+              <button class="btn-secondary" id="btn-jump-db">대시보드 데모</button>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="image-container">
+              <img src="assets/slide1.png" alt="스포애니 AI 혼잡도 스마트 렌더링" class="slide-image">
+            </div>
+            <div class="interactive-card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--spoany-orange)" stroke-width="2"><circle cx="12" cy="12" r="10"></circle><polyline points="12 6 12 12 16 14"></polyline></svg>
+                지점 병목 시간 확인 (피크타임)
+              </div>
+              <p style="font-size: 0.9rem; color: #94A3B8; line-height: 1.5;">
+                매장 내 CCTV 영상을 Jetson Orin Super 엣지 단말이 분석하여 전체 공간 가용률 데이터를 1초 간격으로 추출합니다.
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 2: Pain Point -->
+        <div class="slide" id="slide-2">
+          <div class="slide-info">
+            <span class="slide-number">SLIDE 02 / PAIN POINTS</span>
+            <h2 class="slide-title">회원 이탈을 부르는<br>'대기 스트레스'</h2>
+            <p class="slide-description">
+              퇴근 후 큰맘 먹고 운동하러 온 현장에서, 러닝머신 대기 시간이 길어지거나 프리웨이트 존이 과밀해지면 회원들은 안전 우려와 밀집 피로도로 인해 재등록을 망설이게 됩니다.
+            </p>
+            <div class="slide-features">
+              <div class="feature-item">
+                <div class="feature-icon">!</div>
+                <div class="feature-text">
+                  <h4>유산소 기구 정체</h4>
+                  <p>무작정 대기로 인한 경험 악화 및 PT 전환 흐름 정체 유발.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">!</div>
+                <div class="feature-text">
+                  <h4>프리웨이트 병목</h4>
+                  <p>덤벨, 파워 랙 등 특정 영역 과밀화에 따른 안전사고 및 밀집 정체 유발.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="interactive-card">
+              <div class="card-title">
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--spoany-orange)" stroke-width="2"><line x1="18" y1="20" x2="18" y2="10"></line><line x1="12" y1="20" x2="12" y2="4"></line><line x1="6" y1="20" x2="6" y2="14"></line></svg>
+                시간대별 가상 정체 시뮬레이터 (직접 조절해보세요)
+              </div>
+              <div class="time-slider-container">
+                <div class="slider-labels">
+                  <span>오전 06:00 (여유)</span>
+                  <span id="slider-time-text" style="color: var(--spoany-orange); font-weight: bold;">오후 18:00 (혼잡)</span>
+                  <span>오후 23:00 (마감)</span>
+                </div>
+                <input type="range" min="6" max="23" value="18" class="custom-range" id="congestion-slider">
+                
+                <div class="metrics-grid">
+                  <div class="metric-card" id="cardio-wait-card">
+                    <div class="metric-label">유산소 대기 시간</div>
+                    <div class="metric-value" id="cardio-wait-val">15분</div>
+                  </div>
+                  <div class="metric-card" id="free-density-card">
+                    <div class="metric-label">덤벨 존 혼잡도</div>
+                    <div class="metric-value red" id="free-density-val">85%</div>
+                  </div>
+                  <div class="metric-card" id="member-churn-card">
+                    <div class="metric-label">예상 이탈 지수</div>
+                    <div class="metric-value red" id="member-churn-val">매우 높음</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="image-container">
+              <img src="assets/slide2.png" alt="헬스장 혼잡도 비교" class="slide-image">
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 3: Architecture Diagram -->
+        <div class="slide" id="slide-3">
+          <div class="slide-info">
+            <span class="slide-number">SLIDE 03 / SYSTEM ARCHITECTURE</span>
+            <h2 class="slide-title">엣지 AI 연산과<br>디바이스 허브의 절연</h2>
+            <p class="slide-description">
+              서버 크래시 및 통신 비용 문제를 원천 차단하기 위해, AI 분석(Jetson Orin)과 대화면 디스플레이(Android) 장치를 완벽히 분리하고 내부 초고속 소켓 데이터 전송 패킷 구조로 설계했습니다.
+            </p>
+            
+            <div class="flow-diagram-wrapper">
+              <p style="font-size: 0.9rem; color: #94A3B8; margin-bottom: 0.5rem;">각 단계를 클릭하여 실시간 데이터 흐름을 시뮬레이션 하세요.</p>
+              <div class="node-list">
+                <div class="node-item selected" data-node="cctv">
+                  <div class="node-info-left">
+                    <div class="node-indicator"></div>
+                    <div>
+                      <div class="node-name">1. 지점 CCTV 카메라 스트림</div>
+                      <div class="node-desc">실시간 영상 데이터 송출</div>
+                    </div>
+                  </div>
+                  <div class="node-data-pill">RTSP STREAM</div>
+                </div>
+                
+                <div class="node-item" data-node="jetson">
+                  <div class="node-info-left">
+                    <div class="node-indicator"></div>
+                    <div>
+                      <div class="node-name">2. Jetson Orin Super (백엔드)</div>
+                      <div class="node-desc">완벽 비식별 AI 객체 탐지 및 ROI 계산</div>
+                    </div>
+                  </div>
+                  <div class="node-data-pill">ON-DEVICE AI</div>
+                </div>
+
+                <div class="node-item" data-node="android">
+                  <div class="node-info-left">
+                    <div class="node-indicator"></div>
+                    <div>
+                      <div class="node-name">3. 안드로이드 셋톱박스 / 허브</div>
+                      <div class="node-desc">경량 로컬 JSON 데이터 패킷 수신 및 처리</div>
+                    </div>
+                  </div>
+                  <div class="node-data-pill">JSON PACKET</div>
+                </div>
+
+                <div class="node-item" data-node="tv">
+                  <div class="node-info-left">
+                    <div class="node-indicator"></div>
+                    <div>
+                      <div class="node-name">4. 매장 대형 TV 대시보드 표출</div>
+                      <div class="node-desc">직관적 혼잡 가이드라인 및 히트맵 렌더링</div>
+                    </div>
+                  </div>
+                  <div class="node-data-pill">UI RENDER</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="interactive-card" style="display: flex; justify-content: center; align-items: center; padding: 1rem;">
+              <!-- Mini SVG active diagram showing nodes and light flow -->
+              <svg width="100%" height="200" viewBox="0 0 450 200" id="svg-flow-diagram">
+                <!-- Glowing filters -->
+                <defs>
+                  <filter id="glow-orange" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="6" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                  <filter id="glow-cyan" x="-20%" y="-20%" width="140%" height="140%">
+                    <feGaussianBlur stdDeviation="6" result="blur" />
+                    <feComposite in="SourceGraphic" in2="blur" operator="over" />
+                  </filter>
+                </defs>
+                
+                <!-- Connections -->
+                <path d="M 60,100 L 160,100" stroke="#1E293B" stroke-width="4" id="path-cctv-jetson"/>
+                <path d="M 60,100 L 160,100" stroke="var(--spoany-orange)" stroke-width="2" class="flow-path" id="flow-cctv-jetson" style="display: none;"/>
+
+                <path d="M 210,100 L 310,100" stroke="#1E293B" stroke-width="4" id="path-jetson-android"/>
+                <path d="M 210,100 L 310,100" stroke="var(--neon-cyan)" stroke-width="2" class="flow-path" id="flow-jetson-android" style="display: none;"/>
+
+                <path d="M 360,100 L 410,100" stroke="#1E293B" stroke-width="4" id="path-android-tv"/>
+                <path d="M 360,100 L 410,100" stroke="var(--neon-green)" stroke-width="2" class="flow-path" id="flow-android-tv" style="display: none;"/>
+                
+                <!-- Node Icons -->
+                <!-- CCTV -->
+                <g transform="translate(10, 70)" class="svg-node" id="svg-node-cctv" style="cursor: pointer;">
+                  <rect width="50" height="60" rx="8" fill="#1E293B" stroke="var(--border-color)" stroke-width="1"/>
+                  <circle cx="25" cy="25" r="12" fill="#0F172A"/>
+                  <circle cx="25" cy="25" r="4" fill="var(--neon-red)"/>
+                  <text x="25" y="52" fill="#94A3B8" font-size="8" font-family="Outfit" font-weight="bold" text-anchor="middle">CCTV</text>
+                </g>
+                <!-- Jetson Orin -->
+                <g transform="translate(160, 60)" class="svg-node" id="svg-node-jetson" style="cursor: pointer;">
+                  <rect width="50" height="80" rx="8" fill="#1E293B" stroke="var(--border-color)" stroke-width="1"/>
+                  <!-- Processor micro lines -->
+                  <rect x="10" y="15" width="30" height="30" rx="4" fill="#FF6B00" opacity="0.2"/>
+                  <rect x="15" y="20" width="20" height="20" rx="2" fill="var(--spoany-orange)"/>
+                  <text x="25" y="62" fill="#FFFFFF" font-size="8" font-family="Outfit" font-weight="bold" text-anchor="middle">JETSON</text>
+                  <text x="25" y="72" fill="var(--spoany-orange)" font-size="7" font-family="Outfit" text-anchor="middle">AI ENGINE</text>
+                </g>
+                <!-- Android Box -->
+                <g transform="translate(310, 70)" class="svg-node" id="svg-node-android" style="cursor: pointer;">
+                  <rect width="50" height="60" rx="8" fill="#1E293B" stroke="var(--border-color)" stroke-width="1"/>
+                  <rect x="12" y="15" width="26" height="18" rx="3" fill="#0F172A"/>
+                  <circle cx="25" cy="24" r="3" fill="var(--neon-cyan)"/>
+                  <text x="25" y="48" fill="#FFFFFF" font-size="8" font-family="Outfit" font-weight="bold" text-anchor="middle">ANDROID</text>
+                  <text x="25" y="56" fill="var(--neon-cyan)" font-size="6" font-family="Outfit" text-anchor="middle">HUB</text>
+                </g>
+                <!-- TV Display -->
+                <g transform="translate(400, 75)" class="svg-node" id="svg-node-tv" style="cursor: pointer;">
+                  <rect width="40" height="50" rx="4" fill="#0F172A" stroke="var(--border-color)" stroke-width="2"/>
+                  <rect x="4" y="4" width="32" height="36" fill="#1E293B" rx="2"/>
+                  <!-- Screen chart graph lines -->
+                  <line x1="8" y1="30" x2="16" y2="18" stroke="var(--neon-green)" stroke-width="2"/>
+                  <line x1="16" y1="18" x2="24" y2="25" stroke="var(--neon-green)" stroke-width="2"/>
+                  <line x1="24" y1="25" x2="32" y2="12" stroke="var(--neon-green)" stroke-width="2"/>
+                  <text x="20" y="47" fill="#94A3B8" font-size="6" font-family="Outfit" text-anchor="middle">TV DISPLAY</text>
+                </g>
+              </svg>
+            </div>
+            <div class="image-container">
+              <img src="assets/slide3.png" alt="시스템 기술 다이어그램" class="slide-image">
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 4: Cardio Zone Algorithm -->
+        <div class="slide" id="slide-4">
+          <div class="slide-info">
+            <span class="slide-number">SLIDE 04 / CARDIO ZONE ALGORITHM</span>
+            <h2 class="slide-title">유산소 존 ROI 기반<br>기구 개별 점유 감지</h2>
+            <p class="slide-description">
+              단순 통계 카운팅이 아닙니다. 러닝머신과 사이클 등 고정 배치 기구의 구동부를 개별 ROI(관심 영역)로 정밀 매핑하고 YOLO 객체 검출 모델을 돌려 사용 상태를 1초 단위로 감지합니다.
+            </p>
+            <div class="slide-features">
+              <div class="feature-item">
+                <div class="feature-icon">✓</div>
+                <div class="feature-text">
+                  <h4>시간 영역 필터링</h4>
+                  <p>객체 진입 후 10초 이상 움직임 지속될 시 점유 판정 (지나침 노이즈 배제).</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">✓</div>
+                <div class="feature-text">
+                  <h4>대기 시간 자동 산출</h4>
+                  <p>기구 사용 회전 통계 및 점유율에 따른 예상 대기 시간 자동 환산.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="interactive-card">
+              <div class="card-title" style="justify-content: space-between;">
+                <span>트레드밀 ROI 토글 (클릭하여 기구를 활성화/비활성화 해보세요)</span>
+                <span id="treadmill-usage-tag" style="color: var(--neon-cyan); font-weight: bold;">점유율: 50%</span>
+              </div>
+              
+              <div class="treadmill-grid-widget" id="slide-treadmill-grid">
+                <!-- 8 treadmills generated dynamically -->
+              </div>
+              
+              <div style="margin-top: 1rem; display: flex; justify-content: space-between; font-size: 0.85rem; color: #94A3B8;">
+                <span>현재 대기 인원: <strong id="treadmill-waiting-count" style="color: #FFFFFF;">0명</strong></span>
+                <span>평균 예상 대기시간: <strong id="treadmill-waiting-time" style="color: var(--spoany-orange);">0분</strong></span>
+              </div>
+            </div>
+            <div class="image-container">
+              <img src="assets/slide4.png" alt="유산소 기구 점유 트래킹 화면" class="slide-image">
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 5: Free Weight Zone Algorithm -->
+        <div class="slide" id="slide-5">
+          <div class="slide-info">
+            <span class="slide-number">SLIDE 05 / FREE-WEIGHT ALGORITHM</span>
+            <h2 class="slide-title">프리웨이트 실시간 히트맵<br>및 군중 밀도 추정</h2>
+            <p class="slide-description">
+              회원들의 이동 동선과 밀집도가 유동적인 덤벨 및 파워 랙 존은 공간 전체를 가상의 그리드 격자로 분할하여 인체 객체의 밀도 중심을 트래킹하고 히트맵으로 번지도록 설계했습니다.
+            </p>
+            <div class="slide-features">
+              <div class="feature-item">
+                <div class="feature-icon">✓</div>
+                <div class="feature-text">
+                  <h4>3단계 밀도 분류 지수</h4>
+                  <p>점유율에 따라 <strong>[여유 / 보통 / 혼잡]</strong> 지수로 자동 수치화.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">✓</div>
+                <div class="feature-text">
+                  <h4>우회 이용 텍스트 가이드</h4>
+                  <p>혼잡 상황 감지 즉시 디스플레이 및 앱 화면에 우회 운동 경로 알림 표출.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="interactive-card grid-map-interactive">
+              <div class="card-title" style="justify-content: space-between; margin-bottom: 0.5rem;">
+                <span>덤벨 존 히트맵 시뮬레이터 (그리드를 클릭하여 인파를 배치하세요)</span>
+                <span class="density-badge smooth" id="slide-density-badge">여유</span>
+              </div>
+              
+              <div class="grid-map-canvas-container">
+                <canvas id="slide-heatmap-canvas" class="grid-canvas" width="320" height="180"></canvas>
+              </div>
+              
+              <div class="grid-map-controls">
+                <div class="heatmap-legend">
+                  <div class="legend-item"><div class="legend-color blue"></div><span>여유</span></div>
+                  <div class="legend-item"><div class="legend-color yellow"></div><span>보통</span></div>
+                  <div class="legend-item"><div class="legend-color red"></div><span>혼잡</span></div>
+                </div>
+                <button class="btn-secondary" id="btn-clear-heatmap" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-radius: 6px;">초기화</button>
+              </div>
+              <p id="slide-density-guide" style="font-size: 0.85rem; color: #94A3B8; text-align: center; border-top: 1px solid var(--border-color); padding-top: 0.75rem;">
+                "프리웨이트 존 이용이 매우 원활합니다. 즐거운 득근 시간 되세요!"
+              </p>
+            </div>
+            <div class="image-container">
+              <img src="assets/slide5.png" alt="프리웨이트 격자 밀도 히트맵" class="slide-image">
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 6: Project Roadmap -->
+        <div class="slide" id="slide-6">
+          <div class="slide-info">
+            <span class="slide-number">SLIDE 06 / ROADMAP</span>
+            <h2 class="slide-title">PoC 실증 단계에서<br>전사 앱 API 연동까지</h2>
+            <p class="slide-description">
+              무작정 대규모 시스템 통합을 거치지 않습니다. 1단계로 가맹 지점 1곳의 기존 CCTV 인프라에 단독형 연산을 즉시 도입하여 정합성을 입증하고, 단계별로 전국 가맹점 순차 보급 및 본사 DB 통합을 진행합니다.
+            </p>
+            
+            <div class="roadmap-timeline">
+              <div class="roadmap-phase active" data-phase="1">
+                <div class="phase-header">
+                  <div class="phase-title-group">
+                    <div class="phase-number">1</div>
+                    <span class="phase-title">Phase 1: 지점 단독형 도입 및 PoC 실증</span>
+                  </div>
+                  <span class="phase-date">6월 ~ 7월</span>
+                </div>
+                <div class="phase-details">
+                  <label class="detail-task"><input type="checkbox" checked disabled> 지점 기존 CCTV 카메라 RTSP 연동 테스트</label>
+                  <label class="detail-task"><input type="checkbox" checked disabled> Jetson Orin Super 엣지 디바이스 하드웨어 팩킹</label>
+                  <label class="detail-task"><input type="checkbox" id="task-poc-3"> 매장 대형 디스플레이 UI 실시간 렌더링 테스트</label>
+                  <label class="detail-task"><input type="checkbox" id="task-poc-4"> 카메라 간섭 제거 알고리즘 가동</label>
+                </div>
+              </div>
+
+              <div class="roadmap-phase" data-phase="2">
+                <div class="phase-header">
+                  <div class="phase-title-group">
+                    <div class="phase-number">2</div>
+                    <span class="phase-title">Phase 2: 전국 가맹점 및 모바일 앱 탑재</span>
+                  </div>
+                  <span class="phase-date">8월 ~ 9월</span>
+                </div>
+                <div class="phase-details">
+                  <label class="detail-task"><input type="checkbox" id="task-main-1"> 스포애니 지점별 순차 연산 보드 공급</label>
+                  <label class="detail-task"><input type="checkbox" id="task-main-2"> 모바일 앱 API 서버 로컬 패킷 연동 규격 수립</label>
+                  <label class="detail-task"><input type="checkbox" id="task-main-3"> 앱 내 "가기 전 실시간 혼잡도 조회" 메뉴 런칭</label>
+                  <label class="detail-task"><input type="checkbox" id="task-main-4"> 전 지점 모니터링 관리자 통합 관제 웹 구축</label>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="interactive-card">
+              <div class="card-title">로드맵 마일스톤 진척도</div>
+              <div class="sys-metrics" style="gap: 0.5rem; margin-bottom: 0.5rem;">
+                <div class="sys-metric-item">
+                  <div class="sys-label-group">
+                    <span>전체 태스크 달성도</span>
+                    <span id="roadmap-progress-text">37%</span>
+                  </div>
+                  <div class="sys-bar-bg">
+                    <div class="sys-bar-fill" id="roadmap-progress-fill" style="width: 37.5%;"></div>
+                  </div>
+                </div>
+              </div>
+              <p style="font-size: 0.85rem; color: #94A3B8; line-height: 1.4;">
+                체크박스를 클릭하여 개발 과제를 완수해 가며, 진척도가 어떻게 업데이트 되는지 시뮬레이션 하세요.
+              </p>
+            </div>
+            <div class="image-container">
+              <img src="assets/slide6.png" alt="프로젝트 단계별 로드맵" class="slide-image">
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 7: Conclusion -->
+        <div class="slide" id="slide-7">
+          <div class="slide-info">
+            <span class="slide-number">SLIDE 07 / CONCLUSION</span>
+            <h2 class="slide-title">스포애니 브랜드 가치 극대화<br>"프리미엄 안심 피트니스"</h2>
+            <p class="slide-description">
+              이 도입안은 단순한 대기 카운터 구축이 아닙니다. 대한민국 최대 직영 피트니스로서 스포애니가 엣지 비전 AI 과학적 설비 투자를 통해 회원들을 배려하는 '국내 유일의 선도적 네러티브'를 획기적으로 확보하는 기회입니다.
+            </p>
+            <div class="hero-btns" style="margin-top: 1rem;">
+              <button class="btn-primary" id="btn-conclusion-demo">
+                실시간 관제 대시보드 검증
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="3" y="3" width="18" height="18" rx="2" ry="2"></rect><line x1="9" y1="3" x2="9" y2="21"></line><line x1="15" y1="3" x2="15" y2="21"></line><line x1="3" y1="9" x2="21" y2="9"></line><line x1="3" y1="15" x2="21" y2="15"></line></svg>
+              </button>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="interactive-card" style="padding: 1.5rem; display: flex; flex-direction: column; gap: 1rem;">
+              <div class="card-title">이해관계자별 기대 효과</div>
+              
+              <div style="display: flex; flex-direction: column; gap: 0.75rem;">
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem;">
+                  <span style="color: var(--spoany-orange); font-weight: bold; font-size: 0.9rem;">일반 회원 만족</span>
+                  <p style="font-size: 0.85rem; color: #94A3B8; margin-top: 0.2rem;">불필요한 대기 없이 계획적인 운동 설계 가능, 재등록률 24% 향상 기대.</p>
+                </div>
+                
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem;">
+                  <span style="color: var(--neon-cyan); font-weight: bold; font-size: 0.9rem;">지점 관리 효율</span>
+                  <p style="font-size: 0.85rem; color: #94A3B8; margin-top: 0.2rem;">트래픽 자동 분석으로 최적의 청소 스케줄 및 현장 안전사고 모니터링 자동화.</p>
+                </div>
+
+                <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem;">
+                  <span style="color: var(--neon-green); font-weight: bold; font-size: 0.9rem;">본사 브랜딩 선도</span>
+                  <p style="font-size: 0.85rem; color: #94A3B8; margin-top: 0.2rem;">비전 AI 기반 지능형 피트니스 브랜드 인지도 포지셔닝 선점.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Live AI Dashboard Section -->
+    <div class="dashboard-container" id="dashboard-container">
+      
+      <!-- Top Summary Metrics Bar -->
+      <div class="col-12 summary-bar">
+        <div class="sum-card">
+          <div class="sum-icon orange">🏢</div>
+          <div class="sum-details">
+            <span class="sum-label">전체 지점 혼잡지수</span>
+            <span class="sum-value" id="db-overall-ratio">54%</span>
+          </div>
+        </div>
+
+        <div class="sum-card">
+          <div class="sum-icon green">🏃</div>
+          <div class="sum-details">
+            <span class="sum-label">유산소 러닝머신 점유</span>
+            <span class="sum-value" id="db-cardio-occupancy">4 / 10</span>
+          </div>
+        </div>
+
+        <div class="sum-card">
+          <div class="sum-icon cyan">🏋</div>
+          <div class="sum-details">
+            <span class="sum-label">프리웨이트 덤벨 존 밀도</span>
+            <span class="sum-value" id="db-free-density">보통 (34%)</span>
+          </div>
+        </div>
+
+        <div class="sum-card">
+          <div class="sum-icon red">⚡</div>
+          <div class="sum-details">
+            <span class="sum-label">Jetson Orin 처리속도</span>
+            <span class="sum-value" id="db-edge-fps">58.4 FPS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live CCTV Stream Monitors (Left Panels) -->
+      <div class="col-8 db-card">
+        <div class="db-card-header">
+          <div>
+            <span class="db-card-title">
+              <span class="cctv-rec-dot" style="display:inline-block; margin-right: 4px;"></span>
+              실시간 AI 비식별 비전 카운팅 피드 (RTSP)
+            </span>
+            <span class="db-card-subtitle">지점 내 CCTV 카메라 스트림 로컬 수신 및 프레임별 바운딩 박스 오버레이</span>
+          </div>
+        </div>
+        
+        <div class="cctv-grid">
+          <!-- Feed 1: Cardio Zone -->
+          <div class="cctv-feed">
+            <canvas id="cctv-cardio-canvas" class="cctv-canvas"></canvas>
+            <div class="cctv-overlay">
+              <div class="cctv-header-info">
+                <span class="cctv-tag">CAM-01_CARDIO</span>
+                <span class="cctv-rec-indicator"><span class="cctv-rec-dot"></span>LIVE</span>
+              </div>
+              <div class="cctv-footer-info">
+                <span class="cctv-count" id="cctv-cardio-count">점유: 4</span>
+              </div>
+            </div>
+          </div>
+          
+          <!-- Feed 2: Free Weight Zone -->
+          <div class="cctv-feed">
+            <canvas id="cctv-free-canvas" class="cctv-canvas"></canvas>
+            <div class="cctv-overlay">
+              <div class="cctv-header-info">
+                <span class="cctv-tag">CAM-02_FREEWEIGHT</span>
+                <span class="cctv-rec-indicator"><span class="cctv-rec-dot"></span>LIVE</span>
+              </div>
+              <div class="cctv-footer-info">
+                <span class="cctv-count" id="cctv-free-count" style="background: var(--neon-cyan);">밀도: 34%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feed 3: GX Room Entrance -->
+          <div class="cctv-feed">
+            <canvas id="cctv-gx-canvas" class="cctv-canvas"></canvas>
+            <div class="cctv-overlay">
+              <div class="cctv-header-info">
+                <span class="cctv-tag">CAM-03_GX_ROOM</span>
+                <span class="cctv-rec-indicator"><span class="cctv-rec-dot"></span>LIVE</span>
+              </div>
+              <div class="cctv-footer-info">
+                <span class="cctv-count" id="cctv-gx-count" style="background: var(--neon-green);">입실: 18</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Event Log -->
+        <div class="event-log-container" id="event-log-box">
+          <div class="log-entry"><span class="log-time">[11:40:01]</span> <span class="log-msg">Spoany AI Vision Hub 가동 완료... 로컬 RTSP 핸들러 연결 완료.</span></div>
+          <div class="log-entry"><span class="log-time">[11:40:03]</span> <span class="log-msg">Jetson Orin Super 엣지 GPU 기구 그리드 ROI 맵 맵핑 로드 완료.</span></div>
+          <div class="log-entry"><span class="log-time">[11:40:05]</span> <span class="log-msg">CAM-01: 러닝머신 01번 [점유], 02번 [가용] 감지 갱신.</span></div>
+        </div>
+      </div>
+
+      <!-- Right Panels: Interactive Config & Telemetry -->
+      <div class="col-4 db-card">
+        <div class="db-card-header">
+          <div>
+            <span class="db-card-title">엣지 인프라 리소스 모니터</span>
+            <span class="db-card-subtitle">Jetson Orin 보드 하드웨어 텔레메트리</span>
+          </div>
+        </div>
+
+        <div class="sys-metrics">
+          <div class="sys-metric-item">
+            <div class="sys-label-group">
+              <span>Jetson Orin CPU 사용률</span>
+              <span id="sys-val-cpu">34%</span>
+            </div>
+            <div class="sys-bar-bg">
+              <div class="sys-bar-fill" id="sys-bar-cpu" style="width: 34%;"></div>
+            </div>
+          </div>
+
+          <div class="sys-metric-item">
+            <div class="sys-label-group">
+              <span>Jetson Orin GPU 로드</span>
+              <span id="sys-val-gpu">78%</span>
+            </div>
+            <div class="sys-bar-bg">
+              <div class="sys-bar-fill cyan" id="sys-bar-gpu" style="width: 78%;"></div>
+            </div>
+          </div>
+
+          <div class="sys-metric-item">
+            <div class="sys-label-group">
+              <span>로컬 네트워크 레이턴시</span>
+              <span id="sys-val-latency">4.2 ms</span>
+            </div>
+            <div class="sys-bar-bg">
+              <div class="sys-bar-fill green" id="sys-bar-latency" style="width: 15%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="db-card-header" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <div>
+            <span class="db-card-title">G.X & 스피닝 룸 스케줄 연동</span>
+            <span class="db-card-subtitle">입출동선 실시간 인원 카운팅 기록</span>
+          </div>
+        </div>
+
+        <div class="schedule-list">
+          <div class="schedule-item ongoing">
+            <div class="schedule-info">
+              <span class="class-title">그룹 스피닝 레벨 2</span>
+              <span class="class-time">19:00 ~ 19:50 / 강사: 김스포</span>
+            </div>
+            <span class="class-status-badge ongoing">진행 중 (18명)</span>
+          </div>
+
+          <div class="schedule-item">
+            <div class="schedule-info">
+              <span class="class-title">스포 바디 펌프 GX</span>
+              <span class="class-time">20:00 ~ 20:50 / 강사: 이애니</span>
+            </div>
+            <span class="class-status-badge upcoming">대기 (시작 20분 전)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+</body>
+</html>
