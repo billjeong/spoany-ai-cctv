@@ -27,6 +27,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const gridCols = 10;
   const gridCells = Array(gridRows).fill().map(() => Array(gridCols).fill(0));
 
+  // Pre-populate some cells with mock data for initial layout visualization
+  gridCells[1][1] = 1; // Near dumbbell rack 1
+  gridCells[1][7] = 1; // Near dumbbell rack 2
+  gridCells[3][3] = 1; // Near bench 2
+  gridCells[4][8] = 1; // Near bench 4
+
   // ==========================================
   // DOM ELEMENTS
   // ==========================================
@@ -349,13 +355,53 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnClearHeatmap = document.getElementById('btn-clear-heatmap');
 
   function initHeatmapCanvas() {
-    // Clear canvas with background lines representing floor grid
+    // Clear canvas
     slideCtx.fillStyle = '#04060c';
     slideCtx.fillRect(0, 0, slideHeatmapCanvas.width, slideHeatmapCanvas.height);
     
-    // Draw Grid Lines
-    slideCtx.strokeStyle = 'rgba(255, 255, 255, 0.05)';
+    // Draw Blueprint: Dumbbell Racks
+    slideCtx.fillStyle = 'rgba(255, 107, 0, 0.15)';
+    slideCtx.fillRect(20, 10, 110, 10);
+    slideCtx.fillRect(190, 10, 110, 10);
+    slideCtx.strokeStyle = 'rgba(255, 107, 0, 0.3)';
     slideCtx.lineWidth = 1;
+    slideCtx.strokeRect(20, 10, 110, 10);
+    slideCtx.strokeRect(190, 10, 110, 10);
+    
+    slideCtx.fillStyle = 'rgba(255, 255, 255, 0.25)';
+    slideCtx.font = '7px Outfit';
+    slideCtx.fillText('덤벨 랙 A (RACK A)', 45, 28);
+    slideCtx.fillText('덤벨 랙 B (RACK B)', 215, 28);
+
+    // Draw Blueprint: Benches
+    slideCtx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+    slideCtx.strokeStyle = 'rgba(255, 255, 255, 0.15)';
+    const benches = [
+      { x: 45, y: 55 }, { x: 105, y: 55 },
+      { x: 205, y: 55 }, { x: 265, y: 55 }
+    ];
+    benches.forEach(bench => {
+      slideCtx.fillRect(bench.x, bench.y, 14, 30);
+      slideCtx.strokeRect(bench.x, bench.y, 14, 30);
+      slideCtx.fillStyle = 'rgba(255, 255, 255, 0.12)';
+      slideCtx.fillText('BENCH', bench.x - 3, bench.y + 40);
+      slideCtx.fillStyle = 'rgba(255, 255, 255, 0.04)';
+    });
+
+    // Draw Blueprint: Power Racks
+    slideCtx.fillStyle = 'rgba(0, 240, 255, 0.04)';
+    slideCtx.strokeStyle = 'rgba(0, 240, 255, 0.2)';
+    slideCtx.fillRect(15, 115, 30, 30);
+    slideCtx.strokeRect(15, 115, 30, 30);
+    slideCtx.fillRect(275, 115, 30, 30);
+    slideCtx.strokeRect(275, 115, 30, 30);
+    
+    slideCtx.fillStyle = 'rgba(0, 240, 255, 0.25)';
+    slideCtx.fillText('POWER RACK 1', 10, 155);
+    slideCtx.fillText('POWER RACK 2', 270, 155);
+
+    // Draw Grid Lines
+    slideCtx.strokeStyle = 'rgba(255, 255, 255, 0.03)';
     const cellW = slideHeatmapCanvas.width / gridCols;
     const cellH = slideHeatmapCanvas.height / gridRows;
     
@@ -371,24 +417,31 @@ document.addEventListener('DOMContentLoaded', () => {
       slideCtx.lineTo(slideHeatmapCanvas.width, j * cellH);
       slideCtx.stroke();
     }
+
+    // Redraw all active heat spots in gridCells
+    for (let r = 0; r < gridRows; r++) {
+      for (let c = 0; c < gridCols; c++) {
+        if (gridCells[r][c] === 1) {
+          const px = c * cellW + cellW/2;
+          const py = r * cellH + cellH/2;
+          
+          const radius = 25;
+          const gradient = slideCtx.createRadialGradient(px, py, 2, px, py, radius);
+          gradient.addColorStop(0, 'rgba(255, 42, 109, 0.7)');   // Red core
+          gradient.addColorStop(0.3, 'rgba(255, 107, 0, 0.4)'); // Orange
+          gradient.addColorStop(0.7, 'rgba(255, 230, 0, 0.15)'); // Yellow
+          gradient.addColorStop(1, 'rgba(255, 230, 0, 0)');     // Transparent
+          
+          slideCtx.fillStyle = gradient;
+          slideCtx.beginPath();
+          slideCtx.arc(px, py, radius, 0, Math.PI * 2);
+          slideCtx.fill();
+        }
+      }
+    }
   }
 
   function drawHeatSpot(x, y) {
-    const radius = 25;
-    const gradient = slideCtx.createRadialGradient(x, y, 2, x, y, radius);
-    
-    // Choose warm neon colors
-    gradient.addColorStop(0, 'rgba(255, 42, 109, 0.8)');   // Red core
-    gradient.addColorStop(0.3, 'rgba(255, 107, 0, 0.5)'); // Orange
-    gradient.addColorStop(0.7, 'rgba(255, 230, 0, 0.2)'); // Yellow outer
-    gradient.addColorStop(1, 'rgba(255, 230, 0, 0)');     // Transparent
-    
-    slideCtx.fillStyle = gradient;
-    slideCtx.beginPath();
-    slideCtx.arc(x, y, radius, 0, Math.PI * 2);
-    slideCtx.fill();
-    
-    // Mark grid cell as populated
     const cellW = slideHeatmapCanvas.width / gridCols;
     const cellH = slideHeatmapCanvas.height / gridRows;
     const colIdx = Math.floor(x / cellW);
@@ -398,6 +451,7 @@ document.addEventListener('DOMContentLoaded', () => {
       gridCells[rowIdx][colIdx] = 1;
     }
     
+    initHeatmapCanvas();
     updateDensityMetrics();
     syncDashboardMetrics();
   }
@@ -458,8 +512,9 @@ document.addEventListener('DOMContentLoaded', () => {
     syncDashboardMetrics();
   });
 
-  // Init Slide 5 Canvas
+  // Init Slide 5 Canvas and Metrics
   initHeatmapCanvas();
+  updateDensityMetrics();
 
   // ==========================================
   // SLIDE 6: ROADMAP INTERACTIVE CHECKLIST
