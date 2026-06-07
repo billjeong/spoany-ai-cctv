@@ -1199,9 +1199,9 @@ main {
 }
 
 #roadmap-img-container {
-  max-height: none;
-  width: 100%;
-  aspect-ratio: 16/9;
+  max-height: 38vh;
+  aspect-ratio: 1 / 1;
+  margin: 0 auto;
 }
 
 #roadmap-img-container .slide-image {
