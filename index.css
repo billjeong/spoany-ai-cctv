@@ -1200,6 +1200,17 @@ main {
   }
 }
 
+#roadmap-img-container {
+  max-height: none;
+  width: 100%;
+  aspect-ratio: 16/9;
+}
+
+#roadmap-img-container .slide-image {
+  object-fit: contain;
+  padding: 0;
+}
+
 /* Responsive constraints */
 @media (max-width: 1024px) {
   body {
