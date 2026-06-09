@@ -247,12 +247,12 @@ document.addEventListener('DOMContentLoaded', () => {
     if (nodeName === 'cctv') {
       // Glow CCTV
       document.getElementById('svg-node-cctv').querySelector('rect').setAttribute('stroke', 'var(--neon-red)');
-      document.getElementById('svg-node-cctv').querySelector('rect').setAttribute('filter', 'url(#glow-orange)');
+      document.getElementById('svg-node-cctv').querySelector('rect').setAttribute('filter', 'url(#glow-brand)');
     } else if (nodeName === 'jetson') {
       // CCTV to Jetson flow
       document.getElementById('flow-cctv-jetson').style.display = 'block';
       document.getElementById('svg-node-jetson').querySelector('rect').setAttribute('stroke', 'var(--spoany-orange)');
-      document.getElementById('svg-node-jetson').querySelector('rect').setAttribute('filter', 'url(#glow-orange)');
+      document.getElementById('svg-node-jetson').querySelector('rect').setAttribute('filter', 'url(#glow-brand)');
     } else if (nodeName === 'android') {
       // Jetson to Android flow
       document.getElementById('flow-cctv-jetson').style.display = 'block';
@@ -360,10 +360,10 @@ document.addEventListener('DOMContentLoaded', () => {
     slideCtx.fillRect(0, 0, slideHeatmapCanvas.width, slideHeatmapCanvas.height);
     
     // Draw Blueprint: Dumbbell Racks
-    slideCtx.fillStyle = 'rgba(255, 107, 0, 0.15)';
+    slideCtx.fillStyle = 'rgba(255, 60, 66, 0.15)';
     slideCtx.fillRect(20, 10, 110, 10);
     slideCtx.fillRect(190, 10, 110, 10);
-    slideCtx.strokeStyle = 'rgba(255, 107, 0, 0.3)';
+    slideCtx.strokeStyle = 'rgba(255, 60, 66, 0.3)';
     slideCtx.lineWidth = 1;
     slideCtx.strokeRect(20, 10, 110, 10);
     slideCtx.strokeRect(190, 10, 110, 10);
@@ -428,7 +428,7 @@ document.addEventListener('DOMContentLoaded', () => {
           const radius = 25;
           const gradient = slideCtx.createRadialGradient(px, py, 2, px, py, radius);
           gradient.addColorStop(0, 'rgba(255, 42, 109, 0.7)');   // Red core
-          gradient.addColorStop(0.3, 'rgba(255, 107, 0, 0.4)'); // Orange
+          gradient.addColorStop(0.3, 'rgba(255, 60, 66, 0.4)'); // Brand Red
           gradient.addColorStop(0.7, 'rgba(255, 230, 0, 0.15)'); // Yellow
           gradient.addColorStop(1, 'rgba(255, 230, 0, 0)');     // Transparent
           
@@ -658,7 +658,7 @@ document.addEventListener('DOMContentLoaded', () => {
       if (blob.size > 35 || blob.size < 12) blob.pulseDir *= -1;
       
       const grad = ctxFree.createRadialGradient(blob.x, blob.y, 2, blob.x, blob.y, blob.size);
-      grad.addColorStop(0, 'rgba(255, 107, 0, 0.6)');
+      grad.addColorStop(0, 'rgba(255, 60, 66, 0.6)');
       grad.addColorStop(0.5, 'rgba(255, 230, 0, 0.3)');
       grad.addColorStop(1, 'rgba(255, 230, 0, 0)');
       
