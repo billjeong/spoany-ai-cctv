@@ -1408,6 +1408,92 @@ body:not(.authorized) main {
   to { opacity: 1; transform: translateY(0); }
 }
 
+/* ==========================================
+   모바일(폰) 본문 대응 — 헤더 / 대시보드 / 타이포
+   (1024px 블록은 슬라이드 1열 전환만 처리하므로 보강)
+   ========================================== */
+@media (max-width: 768px) {
+  /* 헤더: 3개 그룹을 줄바꿈하여 정리 */
+  header {
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 0.75rem;
+    padding: 0.85rem 1rem;
+  }
+  .logo-container {
+    gap: 0.5rem;
+  }
+  .logo-text {
+    font-size: 1.3rem;
+  }
+  /* 'by AICube' 인라인 텍스트 축소 (인라인 스타일 우선순위 때문에 !important 사용) */
+  .logo-container > span {
+    font-size: 1rem !important;
+    margin-left: 0.35rem !important;
+    padding-left: 0.5rem !important;
+  }
+  /* 모드 토글: 가로 꽉 채우고 버튼 양분 */
+  .mode-toggle {
+    width: 100%;
+    justify-content: center;
+  }
+  .toggle-btn {
+    flex: 1;
+    padding: 0.55rem 0.5rem;
+    font-size: 0.8rem;
+    text-align: center;
+  }
+  .nav-controls {
+    gap: 0.6rem;
+  }
+  .nav-btn {
+    width: 2.4rem;
+    height: 2.4rem;
+  }
+
+  /* 타이포 축소 */
+  .slide-title {
+    font-size: 2rem;
+  }
+  .slide-description {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+  .slide {
+    gap: 1.5rem;
+  }
+  .hero-btns {
+    flex-wrap: wrap;
+    gap: 0.75rem;
+  }
+  .btn-primary,
+  .btn-secondary {
+    font-size: 0.95rem;
+    padding: 0.85rem 1.5rem;
+  }
+
+  /* 대시보드: 12컬럼 → 단일 컬럼 (col-8/col-4 풀폭으로) */
+  .dashboard-container {
+    grid-template-columns: 1fr;
+    gap: 1rem;
+  }
+  .summary-bar {
+    grid-template-columns: repeat(2, 1fr);
+    gap: 0.75rem;
+  }
+  .sum-card {
+    padding: 0.9rem;
+  }
+  .sum-icon {
+    width: 2.5rem;
+    height: 2.5rem;
+    font-size: 1.25rem;
+  }
+  .sum-value {
+    font-size: 1.25rem;
+  }
+}
+
 /* Password Gate - 소형 화면(모바일) 대응 */
 @media (max-width: 480px) {
   #password-gate {
@@ -1419,6 +1505,24 @@ body:not(.authorized) main {
   }
   .gate-logo {
     font-size: 1.9rem;
+  }
+}
+
+/* 본문 - 초소형 화면(≤480px) 추가 보강 */
+@media (max-width: 480px) {
+  header {
+    padding: 0.75rem 0.85rem;
+  }
+  .toggle-btn {
+    font-size: 0.72rem;
+    padding: 0.5rem 0.4rem;
+  }
+  .slide-title {
+    font-size: 1.7rem;
+  }
+  /* 요약 카드 4개 → 1열 */
+  .summary-bar {
+    grid-template-columns: 1fr;
   }
 }
 
