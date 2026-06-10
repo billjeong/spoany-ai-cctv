@@ -1277,6 +1277,7 @@ body:not(.authorized) main {
   left: 0;
   width: 100vw;
   height: 100vh;
+  height: 100dvh; /* iOS Safari 주소창 영역 보정 */
   background-color: #040712; /* Deep dark background matching the theme */
   display: flex;
   justify-content: center;
@@ -1405,5 +1406,19 @@ body:not(.authorized) main {
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+/* Password Gate - 소형 화면(모바일) 대응 */
+@media (max-width: 480px) {
+  #password-gate {
+    align-items: flex-start; /* 키패드가 입력창 가리는 현상 완화 */
+    padding-top: 12vh;
+  }
+  .gate-container {
+    padding: 2.25rem 1.5rem;
+  }
+  .gate-logo {
+    font-size: 1.9rem;
+  }
 }
 
