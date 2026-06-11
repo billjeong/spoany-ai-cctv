@@ -313,8 +313,8 @@
               <p>인식은 '지금 화면에 사람이 몇 명 보이는가', 추적은 '그 사람이 아까 그 사람인가'를 판단합니다. 두 가지가 함께 작동해야 '실제로 매장에 몇 명이 있고, 얼마나 붐비는가'라는 신뢰할 수 있는 혼잡도가 나옵니다.</p>
             </div>
             <div class="callout-box license">
-              <span class="callout-label">라이선스</span>
-              <p>핵심 인식 엔진은 NVIDIA가 상용 사용을 공식 허용한 사람 검출 전용 모델 PeopleNet. 라이선스 분쟁이나 사후 비용 리스크가 없으며, 매장 환경 맞춤 추가 학습도 동일 라이선스 안에서 가능합니다.</p>
+              <span class="callout-label">엔진 신뢰성</span>
+              <p>핵심 인식은 AICube의 CubeCount 비전 엔진이 담당합니다. NVIDIA가 상용 사용을 공식 허용한 검증 모델 기반으로 라이선스 분쟁이나 사후 비용 리스크가 없으며, 매장 환경 맞춤 추가 학습도 동일 라이선스 안에서 가능합니다. 모델 상세 사양은 계약 단계 기술협의서를 통해 공개합니다.</p>
             </div>
           </div>
           <div class="slide-visual">
@@ -344,7 +344,7 @@
             <span class="slide-number">SLIDE 05 / CARDIO ZONE ALGORITHM</span>
             <h2 class="slide-title">유산소 존 ROI 기반<br>기구 개별 점유 감지</h2>
             <p class="slide-description">
-              단순 통계 카운팅이 아닙니다. 러닝머신과 사이클 등 고정 배치 기구의 구동부를 개별 ROI(관심 영역)로 정밀 매핑하고, 상용 사용이 허용된 검증 모델 PeopleNet이 사용 상태를 1초 단위로 감지합니다.
+              단순 통계 카운팅이 아닙니다. 러닝머신과 사이클 등 고정 배치 기구의 구동부를 개별 ROI(관심 영역)로 정밀 매핑하고, CubeCount 비전 엔진이 사용 상태를 1초 단위로 감지합니다.
             </p>
             <div class="slide-features">
               <div class="feature-item">

@@ -1051,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const randomMsgs = [
       "CAM-01: 기구 ROI 바운딩 데이터 전송 완료.",
-      "Jetson Orin Nano Super: PeopleNet 인퍼런스 지연 16.4ms - 정상 범주 유지 중.",
+      "Jetson Orin Nano Super: CubeCount 비전 엔진 인퍼런스 지연 16.4ms - 정상 범주 유지 중.",
       "CAM-02: 군중 밀도 히트맵 클러스터 분포 업데이트.",
       "스포애니 DB API: 실시간 로컬 패킷 동기화 주기 정상 수신.",
       "안드로이드 허브: TV 렌더 프레임 동기화 대역폭 확인 (12.4 Mbps)"
