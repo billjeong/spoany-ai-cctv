@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // STATE MANAGEMENT
   // ==========================================
   let currentSlide = 1;
-  const totalSlides = 7;
+  const totalSlides = 8;
   let activeMode = 'pitch'; // 'pitch' or 'dashboard'
   
   // Slide 4: Treadmill state (8 items)
@@ -624,6 +624,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const roadmapTasks = [
     document.getElementById('task-poc-3'),
     document.getElementById('task-poc-4'),
+    document.getElementById('task-poc-5'),
     document.getElementById('task-main-1'),
     document.getElementById('task-main-2'),
     document.getElementById('task-main-3'),
@@ -631,9 +632,9 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function updateRoadmapProgress() {
-    // 2 tasks are pre-checked (completed) by default in design (CCTV integration, Orin packing)
+    // 2 tasks are pre-checked (completed) by default in design (CCTV integration, Jetson Orin Nano Super 패킹)
     let completed = 2;
-    const total = 8;
+    const total = 9;
     
     roadmapTasks.forEach(task => {
       if (task && task.checked) completed++;
@@ -649,6 +650,123 @@ document.addEventListener('DOMContentLoaded', () => {
       task.addEventListener('change', updateRoadmapProgress);
     }
   });
+
+  // ==========================================
+  // SLIDE 04: 중복 카운팅 시뮬레이터 (인식 + 추적 2단계)
+  // ==========================================
+  (function initDupCountSimulator() {
+    const canvas = document.getElementById('dup-sim-canvas');
+    if (!canvas) return;
+    const ctx = canvas.getContext('2d');
+    const counterEl = document.getElementById('dup-counter');
+    const btnOff = document.getElementById('btn-track-off');
+    const btnOn = document.getElementById('btn-track-on');
+    const btnReset = document.getElementById('btn-dup-reset');
+
+    const W = canvas.width;
+    const H = canvas.height;
+    const PERSON_COUNT = 8;
+
+    const people = [];
+    for (let i = 0; i < PERSON_COUNT; i++) {
+      const angle = (i / PERSON_COUNT) * Math.PI * 2 + (i * 0.37);
+      const speed = 0.55 + (i % 4) * 0.18;
+      people.push({
+        id: i + 1,
+        x: 40 + ((i * 53) % (W - 80)),
+        y: 30 + ((i * 37) % (H - 60)),
+        dx: Math.cos(angle) * speed,
+        dy: Math.sin(angle) * speed,
+        r: 9
+      });
+    }
+
+    let trackingOn = false;   // 기본값 OFF
+    let cumulative = 0;       // 누적 검출 수
+    let detectAccum = 0;      // 소수 누적 버퍼
+    let lastTs = null;
+
+    function updateCounter() {
+      if (trackingOn) {
+        counterEl.textContent = `실제 인원: ${PERSON_COUNT}명`;
+        counterEl.className = 'dup-counter stable';
+      } else {
+        counterEl.textContent = `누적 검출: ${Math.floor(cumulative)}명`;
+        counterEl.className = 'dup-counter warn';
+      }
+    }
+
+    function setTracking(on) {
+      trackingOn = on;
+      btnOn.classList.toggle('active', on);
+      btnOff.classList.toggle('active', !on);
+      updateCounter();
+    }
+
+    btnOff.addEventListener('click', () => setTracking(false));
+    btnOn.addEventListener('click', () => setTracking(true));
+    btnReset.addEventListener('click', () => {
+      cumulative = 0;
+      detectAccum = 0;
+      updateCounter();
+    });
+
+    function frame(ts) {
+      if (lastTs === null) lastTs = ts;
+      const dt = Math.min(ts - lastTs, 100);
+      lastTs = ts;
+
+      people.forEach(p => {
+        p.x += p.dx;
+        p.y += p.dy;
+        if (p.x < p.r || p.x > W - p.r) p.dx *= -1;
+        if (p.y < p.r || p.y > H - p.r) p.dy *= -1;
+        p.x = Math.max(p.r, Math.min(W - p.r, p.x));
+        p.y = Math.max(p.r, Math.min(H - p.r, p.y));
+      });
+
+      // 추적 OFF: 매 프레임 새로 계수 → 초당 약 PERSON_COUNT(8)씩 누적 증가
+      if (!trackingOn) {
+        detectAccum += (PERSON_COUNT * dt) / 1000;
+        if (detectAccum >= 1) {
+          cumulative += Math.floor(detectAccum);
+          detectAccum -= Math.floor(detectAccum);
+          updateCounter();
+        }
+      }
+
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = 'rgba(255, 255, 255, 0.04)';
+      ctx.lineWidth = 1;
+      for (let gx = 0; gx <= W; gx += 40) {
+        ctx.beginPath(); ctx.moveTo(gx, 0); ctx.lineTo(gx, H); ctx.stroke();
+      }
+      for (let gy = 0; gy <= H; gy += 40) {
+        ctx.beginPath(); ctx.moveTo(0, gy); ctx.lineTo(W, gy); ctx.stroke();
+      }
+
+      const boxColor = trackingOn ? 'rgba(57, 255, 20, 0.9)' : 'rgba(255, 42, 109, 0.9)';
+      const fillColor = trackingOn ? 'rgba(57, 255, 20, 0.18)' : 'rgba(255, 42, 109, 0.18)';
+      people.forEach(p => {
+        ctx.fillStyle = fillColor;
+        ctx.fillRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+        ctx.strokeStyle = boxColor;
+        ctx.lineWidth = 2;
+        ctx.strokeRect(p.x - p.r, p.y - p.r, p.r * 2, p.r * 2);
+        if (trackingOn) {
+          ctx.fillStyle = '#FFFFFF';
+          ctx.font = 'bold 10px Outfit, sans-serif';
+          ctx.textAlign = 'center';
+          ctx.fillText('#' + p.id, p.x, p.y - p.r - 4);
+        }
+      });
+
+      requestAnimationFrame(frame);
+    }
+
+    updateCounter();
+    requestAnimationFrame(frame);
+  })();
 
   // ==========================================
   // LIVE DASHBOARD RENDERING & SIMULATION
@@ -933,7 +1051,7 @@ document.addEventListener('DOMContentLoaded', () => {
     
     const randomMsgs = [
       "CAM-01: 기구 ROI 바운딩 데이터 전송 완료.",
-      "Jetson Orin: YOLOv8 인퍼런스 지연 16.4ms - 정상 범주 유지 중.",
+      "Jetson Orin Nano Super: PeopleNet 인퍼런스 지연 16.4ms - 정상 범주 유지 중.",
       "CAM-02: 군중 밀도 히트맵 클러스터 분포 업데이트.",
       "스포애니 DB API: 실시간 로컬 패킷 동기화 주기 정상 수신.",
       "안드로이드 허브: TV 렌더 프레임 동기화 대역폭 확인 (12.4 Mbps)"

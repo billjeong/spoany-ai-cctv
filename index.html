@@ -90,7 +90,7 @@
                 지점 병목 시간 확인 (피크타임)
               </div>
               <p style="font-size: 0.9rem; color: #94A3B8; line-height: 1.5;">
-                매장 내 CCTV 영상을 Jetson Orin Super 엣지 단말이 분석하여 전체 공간 가용률 데이터를 1초 간격으로 추출합니다.
+                매장 내 기존 CCTV 영상을 Jetson Orin Nano Super 엣지 단말이 매장 안에서 직접 분석하여, 전체 공간 가용률 데이터를 1초 간격으로 산출합니다. 영상은 밖으로 나가지 않고, 숫자만 전달됩니다.
               </p>
             </div>
           </div>
@@ -163,7 +163,7 @@
             <span class="slide-number">SLIDE 03 / SYSTEM ARCHITECTURE</span>
             <h2 class="slide-title">엣지 AI 연산과<br>디바이스 허브의 절연</h2>
             <p class="slide-description">
-              서버 크래시 및 통신 비용 문제를 원천 차단하기 위해, AI 분석(Jetson Orin)과 대화면 디스플레이(Android) 장치를 완벽히 분리하고 내부 초고속 소켓 데이터 전송 패킷 구조로 설계했습니다.
+              서버 장애·통신 비용·영상 유출 우려를 원천 차단하기 위해, AI 분석(Jetson Orin Nano Super)과 대화면 디스플레이(Android) 장치를 완전히 분리했습니다. 매장 밖으로는 원본 영상이 아닌 경량 혼잡도 데이터(JSON)만 이동합니다.
             </p>
             
             <div class="flow-diagram-wrapper">
@@ -184,8 +184,8 @@
                   <div class="node-info-left">
                     <div class="node-indicator"></div>
                     <div>
-                      <div class="node-name">2. Jetson Orin Super (백엔드)</div>
-                      <div class="node-desc">완벽 비식별 AI 객체 탐지 및 ROI 계산</div>
+                      <div class="node-name">2. Jetson Orin Nano Super (백엔드)</div>
+                      <div class="node-desc">온디바이스 사람 인식·추적 및 구역(ROI) 집계 · 원본 영상 외부 미전송</div>
                     </div>
                   </div>
                   <div class="node-data-pill">ON-DEVICE AI</div>
@@ -249,7 +249,7 @@
                   <circle cx="25" cy="25" r="4" fill="var(--neon-red)"/>
                   <text x="25" y="52" fill="#94A3B8" font-size="8" font-family="Outfit" font-weight="bold" text-anchor="middle">CCTV</text>
                 </g>
-                <!-- Jetson Orin -->
+                <!-- Jetson Orin Nano Super -->
                 <g transform="translate(160, 60)" class="svg-node" id="svg-node-jetson" style="cursor: pointer;">
                   <rect width="50" height="80" rx="8" fill="#1E293B" stroke="var(--border-color)" stroke-width="1"/>
                   <!-- Processor micro lines -->
@@ -284,20 +284,74 @@
           </div>
         </div>
 
-        <!-- SLIDE 4: Cardio Zone Algorithm -->
+        <!-- SLIDE 4: AI Pipeline (인식 + 추적 2단계) -->
         <div class="slide" id="slide-4">
           <div class="slide-info">
-            <span class="slide-number">SLIDE 04 / CARDIO ZONE ALGORITHM</span>
+            <span class="slide-number">SLIDE 04 / AI PIPELINE</span>
+            <h2 class="slide-title">사람을 '세는' AI와<br>'알아보는' AI</h2>
+            <p class="slide-description">
+              정확한 혼잡도는 두 단계 AI가 함께 만들어냅니다. 회원은 복잡한 기술을 알 필요 없이, 신뢰할 수 있는 숫자만 받아봅니다.
+            </p>
+            <div class="slide-features">
+              <div class="feature-item">
+                <div class="feature-icon">✓</div>
+                <div class="feature-text">
+                  <h4>1단계 — 인식 (Detection)</h4>
+                  <p>화면 속 사람을 실시간으로 인식합니다. 지금 몇 명이, 어느 구역에 있는지를 매 순간 파악합니다.</p>
+                </div>
+              </div>
+              <div class="feature-item">
+                <div class="feature-icon">✓</div>
+                <div class="feature-text">
+                  <h4>2단계 — 추적 (Tracking)</h4>
+                  <p>같은 사람을 영상이 이어지는 동안 동일 인물로 추적합니다. 중복 없이 '서로 다른 N명'을 세고, 구역별 체류 시간과 입·퇴장 흐름까지 산출합니다.</p>
+                </div>
+              </div>
+            </div>
+            <div class="callout-box">
+              <span class="callout-label">쉽게 말하면</span>
+              <p>인식은 '지금 화면에 사람이 몇 명 보이는가', 추적은 '그 사람이 아까 그 사람인가'를 판단합니다. 두 가지가 함께 작동해야 '실제로 매장에 몇 명이 있고, 얼마나 붐비는가'라는 신뢰할 수 있는 혼잡도가 나옵니다.</p>
+            </div>
+            <div class="callout-box license">
+              <span class="callout-label">라이선스</span>
+              <p>핵심 인식 엔진은 NVIDIA가 상용 사용을 공식 허용한 사람 검출 전용 모델 PeopleNet. 라이선스 분쟁이나 사후 비용 리스크가 없으며, 매장 환경 맞춤 추가 학습도 동일 라이선스 안에서 가능합니다.</p>
+            </div>
+          </div>
+          <div class="slide-visual">
+            <div class="interactive-card">
+              <div class="card-title" style="justify-content: space-between;">
+                <span>중복 카운팅 시뮬레이터</span>
+                <span id="dup-counter" class="dup-counter warn">누적 검출: 0명</span>
+              </div>
+              <div class="dup-sim-frame">
+                <canvas id="dup-sim-canvas" width="480" height="240"></canvas>
+              </div>
+              <div class="dup-sim-controls">
+                <div class="dup-toggle-group">
+                  <button class="dup-toggle active" id="btn-track-off">추적 OFF</button>
+                  <button class="dup-toggle" id="btn-track-on">추적 ON</button>
+                </div>
+                <button class="btn-secondary" id="btn-dup-reset" style="padding: 0.4rem 1rem; font-size: 0.8rem; border-radius: 6px;">리셋</button>
+              </div>
+              <p class="dup-caption">추적이 없으면 같은 사람이 수백 번 계수됩니다. 추적이 있어야 '서로 다른 N명'이 나옵니다.</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- SLIDE 5: Cardio Zone Algorithm -->
+        <div class="slide" id="slide-5">
+          <div class="slide-info">
+            <span class="slide-number">SLIDE 05 / CARDIO ZONE ALGORITHM</span>
             <h2 class="slide-title">유산소 존 ROI 기반<br>기구 개별 점유 감지</h2>
             <p class="slide-description">
-              단순 통계 카운팅이 아닙니다. 러닝머신과 사이클 등 고정 배치 기구의 구동부를 개별 ROI(관심 영역)로 정밀 매핑하고 YOLO 객체 검출 모델을 돌려 사용 상태를 1초 단위로 감지합니다.
+              단순 통계 카운팅이 아닙니다. 러닝머신과 사이클 등 고정 배치 기구의 구동부를 개별 ROI(관심 영역)로 정밀 매핑하고, 상용 사용이 허용된 검증 모델 PeopleNet이 사용 상태를 1초 단위로 감지합니다.
             </p>
             <div class="slide-features">
               <div class="feature-item">
                 <div class="feature-icon">✓</div>
                 <div class="feature-text">
                   <h4>시간 영역 필터링</h4>
-                  <p>객체 진입 후 10초 이상 움직임 지속될 시 점유 판정 (지나침 노이즈 배제).</p>
+                  <p>객체 진입 후 동일 인물(고유 ID)의 움직임이 10초 이상 지속될 시 점유 판정 (지나침 노이즈 배제).</p>
                 </div>
               </div>
               <div class="feature-item">
@@ -331,13 +385,13 @@
           </div>
         </div>
 
-        <!-- SLIDE 5: Free Weight Zone Algorithm -->
-        <div class="slide" id="slide-5">
+        <!-- SLIDE 6: Free Weight Zone Algorithm -->
+        <div class="slide" id="slide-6">
           <div class="slide-info">
-            <span class="slide-number">SLIDE 05 / FREE-WEIGHT ALGORITHM</span>
+            <span class="slide-number">SLIDE 06 / FREE-WEIGHT ALGORITHM</span>
             <h2 class="slide-title">프리웨이트 실시간 히트맵<br>및 군중 밀도 추정</h2>
             <p class="slide-description">
-              회원들의 이동 동선과 밀집도가 유동적인 덤벨 및 파워 랙 존은 공간 전체를 가상의 그리드 격자로 분할하여 인체 객체의 밀도 중심을 트래킹하고 히트맵으로 번지도록 설계했습니다.
+              회원들의 이동 동선과 밀집도가 유동적인 덤벨 및 파워 랙 존은 공간 전체를 가상의 그리드 격자로 분할하여 고유 ID 기반 인원 밀도 중심을 트래킹하고 히트맵으로 번지도록 설계했습니다.
             </p>
             <div class="slide-features">
               <div class="feature-item">
@@ -385,13 +439,13 @@
           </div>
         </div>
 
-        <!-- SLIDE 6: Project Roadmap -->
-        <div class="slide" id="slide-6">
+        <!-- SLIDE 7: Project Roadmap -->
+        <div class="slide" id="slide-7">
           <div class="slide-info">
-            <span class="slide-number">SLIDE 06 / ROADMAP</span>
+            <span class="slide-number">SLIDE 07 / ROADMAP</span>
             <h2 class="slide-title">PoC 실증 단계에서<br>전사 앱 API 연동까지</h2>
             <p class="slide-description">
-              무작정 대규모 시스템 통합을 거치지 않습니다. 1단계로 가맹 지점 1곳의 기존 CCTV 인프라에 단독형 연산을 즉시 도입하여 정합성을 입증하고, 단계별로 전국 가맹점 순차 보급 및 본사 DB 통합을 진행합니다.
+              무작정 대규모 시스템 통합을 거치지 않습니다. 1단계로 직영 지점 1곳의 기존 CCTV 인프라에 단독형 연산을 즉시 도입하여 정합성을 입증하고, 단계별로 전국 직영점 순차 보급 및 본사 DB 통합을 진행합니다.
             </p>
             
             <div class="roadmap-timeline">
@@ -405,9 +459,10 @@
                 </div>
                 <div class="phase-details">
                   <label class="detail-task"><input type="checkbox" checked disabled> 지점 기존 CCTV 카메라 RTSP 연동 테스트</label>
-                  <label class="detail-task"><input type="checkbox" checked disabled> Jetson Orin Super 엣지 디바이스 하드웨어 팩킹</label>
+                  <label class="detail-task"><input type="checkbox" checked disabled> Jetson Orin Nano Super 엣지 디바이스 하드웨어 패킹</label>
                   <label class="detail-task"><input type="checkbox" id="task-poc-3"> 매장 대형 디스플레이 UI 실시간 렌더링 테스트</label>
                   <label class="detail-task"><input type="checkbox" id="task-poc-4"> 카메라 간섭 제거 알고리즘 가동</label>
+                  <label class="detail-task"><input type="checkbox" id="task-poc-5"> 2~4주 운영 데이터 기반 실측 정확도·실시간성 검증</label>
                 </div>
               </div>
 
@@ -415,7 +470,7 @@
                 <div class="phase-header">
                   <div class="phase-title-group">
                     <div class="phase-number">2</div>
-                    <span class="phase-title">2단계: 전국 가맹점 및 모바일 앱 탑재</span>
+                    <span class="phase-title">2단계: 전국 직영점 확산 및 모바일 앱 탑재</span>
                   </div>
                   <span class="phase-date">8월 ~ 9월</span>
                 </div>
@@ -452,10 +507,10 @@
           </div>
         </div>
 
-        <!-- SLIDE 7: Conclusion -->
-        <div class="slide" id="slide-7">
+        <!-- SLIDE 8: Conclusion -->
+        <div class="slide" id="slide-8">
           <div class="slide-info">
-            <span class="slide-number">SLIDE 07 / CONCLUSION</span>
+            <span class="slide-number">SLIDE 08 / CONCLUSION</span>
             <h2 class="slide-title">스포애니 브랜드 가치 극대화<br>"프리미엄 안심 피트니스"</h2>
             <p class="slide-description">
               이 도입안은 단순한 대기 카운터 구축이 아닙니다. 대한민국 최대 직영 피트니스로서 스포애니가 엣지 비전 AI 과학적 설비 투자를 통해 회원들을 배려하는 '국내 유일의 선도적 네러티브'를 획기적으로 확보하는 기회입니다.
@@ -474,7 +529,7 @@
               <div style="display: flex; flex-direction: column; gap: 0.75rem;">
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem;">
                   <span style="color: var(--spoany-orange); font-weight: bold; font-size: 0.9rem;">일반 회원 만족</span>
-                  <p style="font-size: 0.85rem; color: #94A3B8; margin-top: 0.2rem;">불필요한 대기 없이 계획적인 운동 설계 가능, 재등록률 24% 향상 기대.</p>
+                  <p style="font-size: 0.85rem; color: #94A3B8; margin-top: 0.2rem;">방문 전 혼잡도 확인으로 헛걸음과 대기 스트레스를 줄여, 쾌적한 운동 경험이 재등록으로 이어집니다.</p>
                 </div>
                 
                 <div style="background: rgba(255, 255, 255, 0.02); border: 1px solid var(--border-color); border-radius: 8px; padding: 0.75rem;">
@@ -526,7 +581,7 @@
         <div class="sum-card">
           <div class="sum-icon red">⚡</div>
           <div class="sum-details">
-            <span class="sum-label">Jetson Orin 처리속도</span>
+            <span class="sum-label">Jetson Orin Nano Super 추론 속도</span>
             <span class="sum-value" id="db-edge-fps">58.4 FPS</span>
           </div>
         </div>
@@ -538,9 +593,9 @@
           <div>
             <span class="db-card-title">
               <span class="cctv-rec-dot" style="display:inline-block; margin-right: 4px;"></span>
-              실시간 AI 비식별 비전 카운팅 피드 (RTSP)
+              실시간 AI 비전 카운팅 피드 (매장 내 로컬 전용)
             </span>
-            <span class="db-card-subtitle">지점 내 CCTV 카메라 스트림 로컬 수신 및 프레임별 바운딩 박스 오버레이</span>
+            <span class="db-card-subtitle">지점 내 CCTV 카메라 스트림 로컬 수신 및 프레임별 바운딩 박스 오버레이. 영상은 매장 내 관제에서만 표시되며, 외부 대시보드에는 수치만 전달됩니다.</span>
           </div>
         </div>
         
@@ -591,8 +646,9 @@
         <!-- System Event Log -->
         <div class="event-log-container" id="event-log-box">
           <div class="log-entry"><span class="log-time">[11:40:01]</span> <span class="log-msg">Spoany AI Vision Hub 가동 완료... 로컬 RTSP 핸들러 연결 완료.</span></div>
-          <div class="log-entry"><span class="log-time">[11:40:03]</span> <span class="log-msg">Jetson Orin Super 엣지 GPU 기구 그리드 ROI 맵 맵핑 로드 완료.</span></div>
+          <div class="log-entry"><span class="log-time">[11:40:03]</span> <span class="log-msg">Jetson Orin Nano Super 엣지 GPU 기구 그리드 ROI 맵핑 로드 완료.</span></div>
           <div class="log-entry"><span class="log-time">[11:40:05]</span> <span class="log-msg">CAM-01: 러닝머신 01번 [점유], 02번 [가용] 감지 갱신.</span></div>
+          <div class="log-entry"><span class="log-time">[11:40:07]</span> <span class="log-msg">CAM-02: 추적 ID 12건 유지 — 중복 계수 0건</span></div>
         </div>
       </div>
 
@@ -601,14 +657,14 @@
         <div class="db-card-header">
           <div>
             <span class="db-card-title">엣지 인프라 리소스 모니터</span>
-            <span class="db-card-subtitle">Jetson Orin 보드 하드웨어 텔레메트리</span>
+            <span class="db-card-subtitle">Jetson Orin Nano Super 보드 하드웨어 텔레메트리</span>
           </div>
         </div>
 
         <div class="sys-metrics">
           <div class="sys-metric-item">
             <div class="sys-label-group">
-              <span>Jetson Orin CPU 사용률</span>
+              <span>엣지 단말 CPU 사용률</span>
               <span id="sys-val-cpu">34%</span>
             </div>
             <div class="sys-bar-bg">
@@ -618,7 +674,7 @@
 
           <div class="sys-metric-item">
             <div class="sys-label-group">
-              <span>Jetson Orin GPU 로드</span>
+              <span>엣지 단말 GPU 로드</span>
               <span id="sys-val-gpu">78%</span>
             </div>
             <div class="sys-bar-bg">
