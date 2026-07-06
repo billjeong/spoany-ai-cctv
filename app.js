@@ -91,7 +91,7 @@ document.addEventListener('DOMContentLoaded', () => {
   // STATE MANAGEMENT
   // ==========================================
   let currentSlide = 1;
-  const totalSlides = 8;
+  const totalSlides = 9;
   let activeMode = 'pitch'; // 'pitch' or 'dashboard'
   
   // Slide 4: Treadmill state (8 items)
@@ -1060,5 +1060,30 @@ document.addEventListener('DOMContentLoaded', () => {
     const randomMsg = randomMsgs[Math.floor(Math.random() * randomMsgs.length)];
     logSystemEvent(randomMsg);
   }, 4500);
+
+  // ==========================================
+  // SLIDE 3: FALL DETECTION SIMULATION (낙상 감지)
+  // ==========================================
+  const fallStage = document.getElementById('fall-stage');
+  const fallToggle = document.getElementById('fall-toggle');
+  const fallStateText = document.getElementById('fall-state-text');
+  const fallLed = document.getElementById('fall-led');
+
+  if (fallStage && fallToggle && fallStateText && fallLed) {
+    fallToggle.addEventListener('click', () => {
+      const fallen = fallStage.classList.toggle('fallen');
+      if (fallen) {
+        fallToggle.textContent = '정상 자세로 복귀 ▲';
+        fallToggle.classList.add('armed');
+        fallStateText.textContent = '낙상 감지 · 알림 발송';
+        fallLed.classList.add('alarm');
+      } else {
+        fallToggle.textContent = '낙상 시뮬레이션 ▶';
+        fallToggle.classList.remove('armed');
+        fallStateText.textContent = '정상 · 낙상 추적 중';
+        fallLed.classList.remove('alarm');
+      }
+    });
+  }
 
 });

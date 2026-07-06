@@ -70,7 +70,23 @@ Minimalist modern architectural style fitness center entrance, 3D render of a sm
 
 Split screen layout. Left: a highly congested free weight zone in a commercial gym under warm downlight. Right: an elegant infographic dashboard showcasing room congestion indicators (Smooth, Busy, Crowded) with bright cyan status lights.
 
-### **🔲 SLIDE 3\. 시스템 구성도: 백엔드 AI 연산과 디스플레이 허브의 완전한 절연**
+### **🔲 SLIDE 3\. 안전 감지: 넘어진 순간을, 사람보다 먼저 봅니다 (낙상 감지)**
+
+* **비주얼 가이드:** CCTV 화면 위에 사람의 전체 관절점(스켈레톤)이 시안 컬러로 트래킹되다가, 급격한 자세 붕괴 시 골격과 바운딩 박스가 레드로 전환되며 '낙상 의심 감지' 알림 카드가 표출되는 인터랙티브 목업.
+* **스토리텔링 구사:** "스포애니는 24시간 열려 있습니다. 관리자가 상주하지 않는 새벽·심야 시간대에 회원이 넘어지거나 쓰러져도 즉시 알아차리기 어렵습니다. 같은 CCTV 한 대로, 혼잡도와 함께 낙상까지 실시간으로 감지합니다. 혼잡도가 사람을 '세는' AI라면, 낙상 감지는 사람의 '자세'를 읽는 AI입니다. 추가 카메라나 센서 없이, 이미 설치된 RGB CCTV 영상만으로 작동합니다."
+* **핵심 요약:**
+  * **추가 장비 없이, 기존 CCTV 그대로:** 깊이 센서·열화상 카메라 없이 일반 RGB CCTV 영상만으로 감지. 별도 배선 공사나 카메라 교체 불필요로 즉시 도입 가능.
+  * **얼굴이 아닌 '관절점'만 분석 → 비식별:** 얼굴 인식 없이 전체 관절점(스켈레톤) 움직임만으로 낙상 판별. 엣지 단말에서 처리 후 외부에는 낙상 이벤트(시각·구역)만 전송.
+  * **운동 동작을 사고로 오인하지 않음:** 스쿼트·매트 운동처럼 정상적으로 누워 있는 동작과 구분. 급격한 자세 변화와 비정상 자세 지속 시간을 함께 판단해 오탐 최소화.
+* **성능 참고치 (공개 벤치마크 연구 기준):** 민감도(Sensitivity) 86\~100%, 특이도(Specificity) 83\~99%, 정확도(Accuracy) 88\~99.5%. ※ 공개 벤치마크 연구에서 보고된 RGB 카메라 기반 낙상 감지의 달성 가능 수준이며, 실 운영 환경·데이터로 보정. 실측 KPI는 PoC 단계에서 확정.
+* **엔진 신뢰성:** 안전 감지는 AICube의 **CubeGuard 자세 엔진**이 담당합니다. NVIDIA가 상용 사용을 공식 허용한 검증 모델 기반으로 라이선스 분쟁이나 재학습 비용 리스크가 없으며, 현장 데이터로 단계적 적용 학습이 가능합니다. 모델 상세 사양은 계약 단계 기술협의서를 통해 공개합니다.
+* **응답 속도:** 영상 프레임 단위로 낙상을 실시간 감지해 관리자·관제실에 **≤ 5초 내** 즉시 통보, 사고 인지부터 통보까지 지연 최소화.
+
+**📸 촬영 및 생성용 이미지 프롬프트 (Image Prompt)**
+
+Computer vision interface on a dark CCTV feed of a gym free-weight zone. A person rendered as a glowing cyan skeleton pose estimation overlay collapses to the floor; the skeleton and bounding box turn alarm-red, with a sleek alert toast reading "Fall detected" and a timestamp. Non-identifiable, no face recognition, joints-only tracking. Clean technical vector style, cyan and red accents, 8k resolution.
+
+### **🔲 SLIDE 4\. 시스템 구성도: 백엔드 AI 연산과 디스플레이 허브의 완전한 절연**
 
 * **비주얼 가이드:** 데이터의 흐름(Raw Stream ➡️ JSON ➡️ UI Render)이 막힘 없이 전달되는 고화질 흐름 블록도.  
 * **스토리텔링 구사:** "개발실장님들이 가장 흔히 겪으시는 트러블슈팅은 연산 병목으로 인한 시스템 크래시(Crash)입니다. 저희는 이를 방지하기 위해 역할을 완전히 쪼개었습니다. AI 인식·추적 연산만을 전담하는 백엔드 엔진 '젯슨 오린 나노 슈퍼'를 구동하고, 렌더링 및 디스플레이는 저렴하고 가벼운 전면의 안드로이드 기기가 전담합니다. 매장 밖으로는 원본 영상이 아닌 경량 혼잡도 데이터(JSON)만 이동하며, 로컬 소켓 통신을 기반으로 하므로 유선망 수준의 속도로 렉 없는 실시간 갱신을 지원합니다\[cite: 2\]."
@@ -89,7 +105,7 @@ Split screen layout. Left: a highly congested free weight zone in a commercial g
 
 Technical blueprint diagram on deep blue grid paper, high-performance edge AI system design, minimal vector icons for camera feed, Jetson processor, and Android display hub, glowing optical signal transmission lines.
 
-### **🔲 SLIDE 4\. AI 파이프라인: 사람을 '세는' AI와 '알아보는' AI**
+### **🔲 SLIDE 5\. AI 파이프라인: 사람을 '세는' AI와 '알아보는' AI**
 
 * **비주얼 가이드:** 두 단계(인식 ➡️ 추적)가 흐르는 파이프라인 다이어그램. 좌측 '인식(Detection)' 박스에는 다수의 바운딩 박스, 우측 '추적(Tracking)' 박스에는 동일 인물 고유 ID(\#1\~\#8)가 유지되는 비교 목업.  
 * **스토리텔링 구사:** "정확한 혼잡도는 두 단계 AI가 함께 만들어냅니다. **1단계 '인식(Detection)'** 은 화면 속 사람을 실시간으로 인식해 지금 몇 명이 어느 구역에 있는지를 매 순간 파악합니다. **2단계 '추적(Tracking)'** 은 같은 사람을 영상이 이어지는 동안 동일 인물로 추적해, 중복 없이 '서로 다른 N명'을 세고 구역별 체류 시간과 입·퇴장 흐름까지 산출합니다. 추적이 없으면 같은 사람이 수백 번 계수되지만, 추적이 있어야 신뢰할 수 있는 실제 인원이 나옵니다. 회원은 복잡한 기술을 알 필요 없이, 신뢰할 수 있는 숫자만 받아봅니다."  
@@ -102,7 +118,7 @@ Technical blueprint diagram on deep blue grid paper, high-performance edge AI sy
 
 Two-stage AI pipeline infographic on a dark background. Left panel labeled "Detection" with multiple neon bounding boxes over gym visitors. Right panel labeled "Tracking" showing the same individuals retaining persistent ID tags (#1 to #8) as they move. Clean technical vector style, cyan and orange accents, 8k resolution.
 
-### **🔲 SLIDE 5\. 유산소 존 알고리즘: ROI 기반 개별 트레드밀 점유 식별**
+### **🔲 SLIDE 6\. 유산소 존 알고리즘: ROI 기반 개별 트레드밀 점유 식별**
 
 * **비주얼 가이드:** CCTV 화면 격자선(그린/레드 ROI 박스) 위에 사람의 실루엣이 겹쳤을 때, 활성화 상호작용이 표시되는 인공지능 탐지 목업 화면.  
 * **스토리텔링 구사:** "전체 머리수를 세는 뻔한 비전 AI 기술이 아닙니다. 기존 설치된 CCTV 화면 속의 각 러닝머신 발판 및 싸이클 구동부를 개별 관심구역(ROI)으로 바코드 그리드 매핑합니다\[cite: 2\]. CubeCount 비전 엔진으로 인식한 인체를 고유 ID로 추적하여, 동일 인물이 해당 픽셀 영역과 ![][image1] 이상 중첩된 채 모션이 지속될 때에만 '기구 사용 중'으로 트리거를 발생시킵니다. 카운터 직원이 직접 보지 않고도, 매장 러닝머신 전체 가용 상태가 1초 단위로 대시보드에 업데이트됩니다."
@@ -117,7 +133,7 @@ Two-stage AI pipeline infographic on a dark background. Left panel labeled "Dete
 
 Clean graphic showing real-time AI computer vision interface. Top-down isometric perspective of a line of treadmills with glowing neon green bounding boxes labeled "ID-01: FREE" and red bounding boxes labeled "ID-02: OCCUPIED", showing skeletal tracking overlay on jogging figures.
 
-### **🔲 SLIDE 6\. 프리웨이트 존 알고리즘: 히트맵 기반 공간 혼잡 추정**
+### **🔲 SLIDE 7\. 프리웨이트 존 알고리즘: 히트맵 기반 공간 혼잡 추정**
 
 * **비주얼 가이드:** 고정되지 않는 프리웨이트 존 바닥에 따뜻한 온도 차트(블루에서 오렌지로 번지는 격자 히트맵)가 시뮬레이션된 입체 렌더링 샷.  
 * **스토리텔링 구사:** "덤벨 랙이나 벤치프레스 랙처럼 회원들이 수시로 자리를 옮기거나 기구들을 섞어서 쓰는 구역은 기구 매핑이 무의미합니다. 당사는 해당 구역 바닥 평면 전체를 가상의 그리드 격자로 분할하고 **군중 밀도 추정 알고리즘**을 돌립니다. 사람의 밀도가 밀집되는 영역이 시각화되면, 이를 '여유, 보통, 혼잡'이라는 3단계 상태 코드로 간결하게 데이터화하여 매장 TV 디스플레이에 알람 가이드라인으로 표출합니다."
@@ -132,7 +148,7 @@ Clean graphic showing real-time AI computer vision interface. Top-down isometric
 
 Minimalist interior design of a spacious weightlifting zone, 2D grid overlay illuminated with smart neon orange and yellow heat mapping clusters surrounding squat racks. Contemporary digital layout, ultra-clean commercial photography.
 
-### **🔲 SLIDE 7\. 프로젝트 로드맵: 단독 가동 PoC에서 전사 앱 연동까지**
+### **🔲 SLIDE 8\. 프로젝트 로드맵: 단독 가동 PoC에서 전사 앱 연동까지**
 
 * **비주얼 가이드:** 간결하고 신속한 가로 마일스톤 흐름도.  
 * **스토리텔링 구사:** "스포애니 본사와 처음부터 머리 아프게 데이터베이스(DB) 통합 및 서버 인프라 논의를 시작하지 않겠습니다. 그것은 개발 부서의 부담을 키워 계약 성사율만 떨어뜨립니다. 1단계로 스포애니 직영 지점 1곳의 기존 CCTV에 저희 젯슨 오린 나노 슈퍼 엣지 보드와 안드로이드 셋톱박스만 단독으로 가동하는 '단독형 엣지 패키지' 검토(PoC)를 진행합니다\[cite: 2\]. 현장에서 확실한 기술과 회원 만족도를 입증한 후, 2단계로 전 지점 도입 및 스포애니 모바일 앱 내 API 연동을 논의하여 도입 부담을 완전히 해소하겠습니다."
