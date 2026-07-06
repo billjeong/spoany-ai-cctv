@@ -106,9 +106,9 @@ document.addEventListener('DOMContentLoaded', () => {
     { id: 8, name: '트레드밀 8', occupied: true }
   ];
 
-  // Slide 5: Heatmap variables
+  // Slide 5: Heatmap variables (슬라이드 위젯이 없는 페이지에서는 생략)
   const slideHeatmapCanvas = document.getElementById('slide-heatmap-canvas');
-  const slideCtx = slideHeatmapCanvas.getContext('2d');
+  const slideCtx = slideHeatmapCanvas ? slideHeatmapCanvas.getContext('2d') : null;
   let isDrawingHeatmap = false;
   const gridRows = 6;
   const gridCols = 10;
@@ -141,19 +141,23 @@ document.addEventListener('DOMContentLoaded', () => {
   // SLIDE NAVIGATION LOGIC
   // ==========================================
   function updateSlideView() {
+    // 슬라이드 UI가 없는 페이지(dashboard.html)에서는 아무 것도 하지 않음
+    if (!slideIndicator || !btnPrev || !btnNext) return;
+
     // Update slides visibility
     for (let i = 1; i <= totalSlides; i++) {
       const slide = document.getElementById(`slide-${i}`);
+      if (!slide) continue;
       if (i === currentSlide) {
         slide.classList.add('active');
       } else {
         slide.classList.remove('active');
       }
     }
-    
+
     // Update header indicator
     slideIndicator.textContent = `${currentSlide} / ${totalSlides}`;
-    
+
     // Button state
     btnPrev.disabled = currentSlide === 1;
     btnNext.disabled = currentSlide === totalSlides;
@@ -173,8 +177,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  btnNext.addEventListener('click', nextSlide);
-  btnPrev.addEventListener('click', prevSlide);
+  if (btnNext) btnNext.addEventListener('click', nextSlide);
+  if (btnPrev) btnPrev.addEventListener('click', prevSlide);
 
   // Keyboard navigation
   document.addEventListener('keydown', (e) => {
@@ -188,15 +192,24 @@ document.addEventListener('DOMContentLoaded', () => {
   });
 
   // Slide 1 actions
-  btnStartPitch.addEventListener('click', nextSlide);
-  btnJumpDb.addEventListener('click', () => switchMode('dashboard'));
-  btnConclusionDemo.addEventListener('click', () => switchMode('dashboard'));
+  if (btnStartPitch) btnStartPitch.addEventListener('click', nextSlide);
+  if (btnJumpDb) btnJumpDb.addEventListener('click', () => switchMode('dashboard'));
+  if (btnConclusionDemo) btnConclusionDemo.addEventListener('click', () => switchMode('dashboard'));
 
   // ==========================================
   // MODE TOGGLE (PITCH VS DASHBOARD)
   // ==========================================
   function switchMode(mode) {
     activeMode = mode;
+
+    // 슬라이드 UI가 없는 페이지(dashboard.html): 항상 대시보드 모드로만 동작
+    if (!pitchContainer || !btnModePitch || !btnModeDashboard || !navControls) {
+      if (dashboardContainer) dashboardContainer.classList.add('active');
+      initDashboardStreams();
+      syncDashboardMetrics();
+      return;
+    }
+
     if (mode === 'pitch') {
       btnModePitch.classList.add('active');
       btnModeDashboard.classList.remove('active');
@@ -217,8 +230,8 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  btnModePitch.addEventListener('click', () => switchMode('pitch'));
-  btnModeDashboard.addEventListener('click', () => switchMode('dashboard'));
+  if (btnModePitch) btnModePitch.addEventListener('click', () => switchMode('pitch'));
+  if (btnModeDashboard) btnModeDashboard.addEventListener('click', () => switchMode('dashboard'));
 
   // ==========================================
   // SLIDE 2: TIME CONGESTION SLIDER
@@ -307,12 +320,14 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  congestionSlider.addEventListener('input', (e) => {
-    updateCongestionMetrics(parseInt(e.target.value));
-  });
-  
-  // Init Slide 2 metrics
-  updateCongestionMetrics(18);
+  if (congestionSlider) {
+    congestionSlider.addEventListener('input', (e) => {
+      updateCongestionMetrics(parseInt(e.target.value));
+    });
+
+    // Init Slide 2 metrics
+    updateCongestionMetrics(18);
+  }
 
   // ==========================================
   // SLIDE 3: SVG FLOW DIAGRAM ARCHITECTURE
@@ -364,14 +379,16 @@ document.addEventListener('DOMContentLoaded', () => {
     });
   });
 
-  // Bind click directly to SVG nodes as well
-  document.getElementById('svg-node-cctv').addEventListener('click', () => document.querySelector('[data-node="cctv"]').click());
-  document.getElementById('svg-node-jetson').addEventListener('click', () => document.querySelector('[data-node="jetson"]').click());
-  document.getElementById('svg-node-android').addEventListener('click', () => document.querySelector('[data-node="android"]').click());
-  document.getElementById('svg-node-tv').addEventListener('click', () => document.querySelector('[data-node="tv"]').click());
+  // Bind click directly to SVG nodes as well (다이어그램이 있는 페이지에서만)
+  if (document.getElementById('svg-flow-diagram')) {
+    document.getElementById('svg-node-cctv').addEventListener('click', () => document.querySelector('[data-node="cctv"]').click());
+    document.getElementById('svg-node-jetson').addEventListener('click', () => document.querySelector('[data-node="jetson"]').click());
+    document.getElementById('svg-node-android').addEventListener('click', () => document.querySelector('[data-node="android"]').click());
+    document.getElementById('svg-node-tv').addEventListener('click', () => document.querySelector('[data-node="tv"]').click());
 
-  // Init Slide 3 diagram state
-  triggerDiagramFlow('cctv');
+    // Init Slide 3 diagram state
+    triggerDiagramFlow('cctv');
+  }
 
   // ==========================================
   // SLIDE 4: CARDIO ZONE TREADMILL ROI GRID
@@ -382,6 +399,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const treadmillWaitingTime = document.getElementById('treadmill-waiting-time');
 
   function renderTreadmills() {
+    if (!slideTreadmillGrid) return;
     slideTreadmillGrid.innerHTML = '';
     
     treadmillState.forEach(tm => {
@@ -405,6 +423,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function calculateCardioMetrics() {
+    if (!treadmillUsageTag || !treadmillWaitingCount || !treadmillWaitingTime) return;
     const occupiedCount = treadmillState.filter(tm => tm.occupied).length;
     const ratio = Math.round((occupiedCount / treadmillState.length) * 100);
     treadmillUsageTag.textContent = `점유율: ${ratio}%`;
@@ -442,6 +461,7 @@ document.addEventListener('DOMContentLoaded', () => {
   const btnClearHeatmap = document.getElementById('btn-clear-heatmap');
 
   function initHeatmapCanvas() {
+    if (!slideCtx) return;
     // Clear canvas
     slideCtx.fillStyle = '#04060c';
     slideCtx.fillRect(0, 0, slideHeatmapCanvas.width, slideHeatmapCanvas.height);
@@ -544,6 +564,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function updateDensityMetrics() {
+    if (!slideDensityBadge || !slideDensityGuide) return;
     let activeCells = 0;
     for (let r = 0; r < gridRows; r++) {
       for (let c = 0; c < gridCols; c++) {
@@ -568,36 +589,40 @@ document.addEventListener('DOMContentLoaded', () => {
     }
   }
 
-  slideHeatmapCanvas.addEventListener('mousedown', (e) => {
-    isDrawingHeatmap = true;
-    const rect = slideHeatmapCanvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    drawHeatSpot(x, y);
-  });
+  if (slideHeatmapCanvas) {
+    slideHeatmapCanvas.addEventListener('mousedown', (e) => {
+      isDrawingHeatmap = true;
+      const rect = slideHeatmapCanvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      drawHeatSpot(x, y);
+    });
 
-  slideHeatmapCanvas.addEventListener('mousemove', (e) => {
-    if (!isDrawingHeatmap) return;
-    const rect = slideHeatmapCanvas.getBoundingClientRect();
-    const x = e.clientX - rect.left;
-    const y = e.clientY - rect.top;
-    drawHeatSpot(x, y);
-  });
+    slideHeatmapCanvas.addEventListener('mousemove', (e) => {
+      if (!isDrawingHeatmap) return;
+      const rect = slideHeatmapCanvas.getBoundingClientRect();
+      const x = e.clientX - rect.left;
+      const y = e.clientY - rect.top;
+      drawHeatSpot(x, y);
+    });
 
-  window.addEventListener('mouseup', () => {
-    isDrawingHeatmap = false;
-  });
+    window.addEventListener('mouseup', () => {
+      isDrawingHeatmap = false;
+    });
+  }
 
-  btnClearHeatmap.addEventListener('click', () => {
-    for (let r = 0; r < gridRows; r++) {
-      for (let c = 0; c < gridCols; c++) {
-        gridCells[r][c] = 0;
+  if (btnClearHeatmap) {
+    btnClearHeatmap.addEventListener('click', () => {
+      for (let r = 0; r < gridRows; r++) {
+        for (let c = 0; c < gridCols; c++) {
+          gridCells[r][c] = 0;
+        }
       }
-    }
-    initHeatmapCanvas();
-    updateDensityMetrics();
-    syncDashboardMetrics();
-  });
+      initHeatmapCanvas();
+      updateDensityMetrics();
+      syncDashboardMetrics();
+    });
+  }
 
   // Init Slide 5 Canvas and Metrics
   initHeatmapCanvas();
@@ -632,6 +657,7 @@ document.addEventListener('DOMContentLoaded', () => {
   ];
 
   function updateRoadmapProgress() {
+    if (!roadmapProgressText || !roadmapProgressFill) return;
     // 2 tasks are pre-checked (completed) by default in design (CCTV integration, Jetson Orin Nano Super 패킹)
     let completed = 2;
     const total = 9;
@@ -779,11 +805,12 @@ document.addEventListener('DOMContentLoaded', () => {
   const cctvFree = document.getElementById('cctv-free-canvas');
   const cctvGx = document.getElementById('cctv-gx-canvas');
   
-  const ctxCardio = cctvCardio.getContext('2d');
-  const ctxFree = cctvFree.getContext('2d');
-  const ctxGx = cctvGx.getContext('2d');
+  const ctxCardio = cctvCardio ? cctvCardio.getContext('2d') : null;
+  const ctxFree = cctvFree ? cctvFree.getContext('2d') : null;
+  const ctxGx = cctvGx ? cctvGx.getContext('2d') : null;
 
   function initDashboardStreams() {
+    if (!ctxCardio || !ctxFree || !ctxGx) return;
     if (streamIntervalId) clearInterval(streamIntervalId);
     
     // Set internal resolution of CCTV canvas to match display aspect ratio
@@ -989,6 +1016,7 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function logSystemEvent(msg) {
+    if (!eventLogBox) return;
     const time = new Date();
     const hh = String(time.getHours()).padStart(2, '0');
     const mm = String(time.getMinutes()).padStart(2, '0');
@@ -1023,6 +1051,8 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   function syncDashboardMetrics() {
+    if (!document.getElementById('db-cardio-occupancy')) return;
+
     // 1. Treadmill occupancy sync
     const occupiedCount = treadmillState.filter(tm => tm.occupied).length;
     document.getElementById('db-cardio-occupancy').textContent = `${occupiedCount} / 8`;
@@ -1084,6 +1114,17 @@ document.addEventListener('DOMContentLoaded', () => {
         fallLed.classList.remove('alarm');
       }
     });
+  }
+
+  // ==========================================
+  // DASHBOARD-ONLY PAGE BOOTSTRAP (dashboard.html)
+  // 슬라이드덱 UI가 없으면 대시보드를 즉시 기본 모드로 가동
+  // ==========================================
+  if (!pitchContainer && dashboardContainer) {
+    activeMode = 'dashboard';
+    dashboardContainer.classList.add('active');
+    initDashboardStreams();
+    syncDashboardMetrics();
   }
 
 });

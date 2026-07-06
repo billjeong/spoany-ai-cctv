@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>스포애니 AI 혼잡도 안내 — 실시간 AI 관제 대시보드</title>
+  <meta name="description" content="스포애니 지점 혼잡도를 온디바이스 AI로 분석해 회원에게 실시간 안내하는 시스템 도입 제안.">
+  <meta name="robots" content="noindex, nofollow">
+  <meta property="og:type" content="website">
+  <meta property="og:locale" content="ko_KR">
+  <meta property="og:title" content="스포애니 AI 혼잡도 안내 — 실시간 AI 관제 대시보드">
+  <meta property="og:description" content="스포애니 지점 혼잡도를 온디바이스 AI로 분석해 회원에게 실시간 안내하는 시스템 도입 제안.">
+  <meta property="og:site_name" content="스포애니 AI 혼잡도 안내 제안">
+  <meta name="twitter:card" content="summary">
+  <link rel="stylesheet" href="index.css">
+</head>
+<body>
+
+  <!-- Password Gate Screen (Basic Client-Side protection for external blocking) -->
+  <div id="password-gate">
+    <div class="gate-container">
+      <div class="gate-logo">
+        <span>SPOANY</span> <span>AI</span>
+      </div>
+      <div class="gate-badge">VISION HUB</div>
+      <p class="gate-title">제안서 보안 인증</p>
+      <p class="gate-description">본 제안서는 대외비 문서입니다.<br>전송받은 4자리 PIN 번호를 입력하십시오.</p>
+
+      <div class="gate-input-wrapper">
+        <input type="password" id="gate-password-input" inputmode="numeric" pattern="[0-9]*" placeholder="••••" maxlength="4" autocomplete="off" autofocus>
+      </div>
+
+      <p id="gate-error-msg" class="gate-error-msg"></p>
+    </div>
+  </div>
+
+
+  <!-- Header -->
+  <header>
+    <div class="logo-container">
+      <div class="logo-text"><span>SPOANY</span> <span>AI</span></div>
+      <div class="logo-badge">VISION HUB</div>
+      <span style="font-size: 1.6rem; color: #64748B; font-family: var(--font-display); margin-left: 0.5rem; border-left: 1px solid var(--border-color); padding-left: 0.75rem; font-weight: 800; text-transform: uppercase; letter-spacing: -1px;">by AICube</span>
+      <a class="master-link" href="https://0spoanymaster.vercel.app/" title="스포애니 통합 제안 허브로 이동">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg>
+        통합 허브
+      </a>
+    </div>
+
+    <a class="master-link" href="./" title="스포애니 AI 혼잡도 안내 제안서 본문으로 이동">← 제안서 본문</a>
+  </header>
+
+  <!-- Main Body -->
+  <main>
+
+    <!-- Live AI Dashboard Section -->
+    <div class="dashboard-container active" id="dashboard-container">
+
+      <!-- Top Summary Metrics Bar -->
+      <div class="col-12 summary-bar">
+        <div class="sum-card">
+          <div class="sum-icon orange">🏢</div>
+          <div class="sum-details">
+            <span class="sum-label">전체 지점 혼잡지수</span>
+            <span class="sum-value" id="db-overall-ratio">54%</span>
+          </div>
+        </div>
+
+        <div class="sum-card">
+          <div class="sum-icon green">🏃</div>
+          <div class="sum-details">
+            <span class="sum-label">유산소 러닝머신 점유</span>
+            <span class="sum-value" id="db-cardio-occupancy">4 / 10</span>
+          </div>
+        </div>
+
+        <div class="sum-card">
+          <div class="sum-icon cyan">🏋</div>
+          <div class="sum-details">
+            <span class="sum-label">프리웨이트 덤벨 존 밀도</span>
+            <span class="sum-value" id="db-free-density">보통 (34%)</span>
+          </div>
+        </div>
+
+        <div class="sum-card">
+          <div class="sum-icon red">⚡</div>
+          <div class="sum-details">
+            <span class="sum-label">Jetson Orin Nano Super 추론 속도</span>
+            <span class="sum-value" id="db-edge-fps">58.4 FPS</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Live CCTV Stream Monitors (Left Panels) -->
+      <div class="col-8 db-card">
+        <div class="db-card-header">
+          <div>
+            <span class="db-card-title">
+              <span class="cctv-rec-dot" style="display:inline-block; margin-right: 4px;"></span>
+              실시간 AI 비전 카운팅 피드 (매장 내 로컬 전용)
+            </span>
+            <span class="db-card-subtitle">지점 내 CCTV 카메라 스트림 로컬 수신 및 프레임별 바운딩 박스 오버레이. 영상은 매장 내 관제에서만 표시되며, 외부 대시보드에는 수치만 전달됩니다.</span>
+          </div>
+        </div>
+
+        <div class="cctv-grid">
+          <!-- Feed 1: Cardio Zone -->
+          <div class="cctv-feed">
+            <canvas id="cctv-cardio-canvas" class="cctv-canvas"></canvas>
+            <div class="cctv-overlay">
+              <div class="cctv-header-info">
+                <span class="cctv-tag">CAM-01_CARDIO</span>
+                <span class="cctv-rec-indicator"><span class="cctv-rec-dot"></span>LIVE</span>
+              </div>
+              <div class="cctv-footer-info">
+                <span class="cctv-count" id="cctv-cardio-count">점유: 4</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feed 2: Free Weight Zone -->
+          <div class="cctv-feed">
+            <canvas id="cctv-free-canvas" class="cctv-canvas"></canvas>
+            <div class="cctv-overlay">
+              <div class="cctv-header-info">
+                <span class="cctv-tag">CAM-02_FREEWEIGHT</span>
+                <span class="cctv-rec-indicator"><span class="cctv-rec-dot"></span>LIVE</span>
+              </div>
+              <div class="cctv-footer-info">
+                <span class="cctv-count" id="cctv-free-count" style="background: var(--neon-cyan);">밀도: 34%</span>
+              </div>
+            </div>
+          </div>
+
+          <!-- Feed 3: GX Room Entrance -->
+          <div class="cctv-feed">
+            <canvas id="cctv-gx-canvas" class="cctv-canvas"></canvas>
+            <div class="cctv-overlay">
+              <div class="cctv-header-info">
+                <span class="cctv-tag">CAM-03_GX_ROOM</span>
+                <span class="cctv-rec-indicator"><span class="cctv-rec-dot"></span>LIVE</span>
+              </div>
+              <div class="cctv-footer-info">
+                <span class="cctv-count" id="cctv-gx-count" style="background: var(--neon-green);">입실: 18</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- System Event Log -->
+        <div class="event-log-container" id="event-log-box">
+          <div class="log-entry"><span class="log-time">[11:40:01]</span> <span class="log-msg">Spoany AI Vision Hub 가동 완료... 로컬 RTSP 핸들러 연결 완료.</span></div>
+          <div class="log-entry"><span class="log-time">[11:40:03]</span> <span class="log-msg">Jetson Orin Nano Super 엣지 GPU 기구 그리드 ROI 맵핑 로드 완료.</span></div>
+          <div class="log-entry"><span class="log-time">[11:40:05]</span> <span class="log-msg">CAM-01: 러닝머신 01번 [점유], 02번 [가용] 감지 갱신.</span></div>
+          <div class="log-entry"><span class="log-time">[11:40:07]</span> <span class="log-msg">CAM-02: 추적 ID 12건 유지 — 중복 계수 0건</span></div>
+        </div>
+      </div>
+
+      <!-- Right Panels: Interactive Config & Telemetry -->
+      <div class="col-4 db-card">
+        <div class="db-card-header">
+          <div>
+            <span class="db-card-title">엣지 인프라 리소스 모니터</span>
+            <span class="db-card-subtitle">Jetson Orin Nano Super 보드 하드웨어 텔레메트리</span>
+          </div>
+        </div>
+
+        <div class="sys-metrics">
+          <div class="sys-metric-item">
+            <div class="sys-label-group">
+              <span>엣지 단말 CPU 사용률</span>
+              <span id="sys-val-cpu">34%</span>
+            </div>
+            <div class="sys-bar-bg">
+              <div class="sys-bar-fill" id="sys-bar-cpu" style="width: 34%;"></div>
+            </div>
+          </div>
+
+          <div class="sys-metric-item">
+            <div class="sys-label-group">
+              <span>엣지 단말 GPU 로드</span>
+              <span id="sys-val-gpu">78%</span>
+            </div>
+            <div class="sys-bar-bg">
+              <div class="sys-bar-fill cyan" id="sys-bar-gpu" style="width: 78%;"></div>
+            </div>
+          </div>
+
+          <div class="sys-metric-item">
+            <div class="sys-label-group">
+              <span>로컬 네트워크 레이턴시</span>
+              <span id="sys-val-latency">4.2 ms</span>
+            </div>
+            <div class="sys-bar-bg">
+              <div class="sys-bar-fill green" id="sys-bar-latency" style="width: 15%;"></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="db-card-header" style="margin-top: 1rem; border-top: 1px solid var(--border-color); padding-top: 1rem;">
+          <div>
+            <span class="db-card-title">G.X & 스피닝 룸 스케줄 연동</span>
+            <span class="db-card-subtitle">입출동선 실시간 인원 카운팅 기록</span>
+          </div>
+        </div>
+
+        <div class="schedule-list">
+          <div class="schedule-item ongoing">
+            <div class="schedule-info">
+              <span class="class-title">그룹 스피닝 레벨 2</span>
+              <span class="class-time">19:00 ~ 19:50 / 강사: 김스포</span>
+            </div>
+            <span class="class-status-badge ongoing">진행 중 (18명)</span>
+          </div>
+
+          <div class="schedule-item">
+            <div class="schedule-info">
+              <span class="class-title">스포 바디 펌프 GX</span>
+              <span class="class-time">20:00 ~ 20:50 / 강사: 이애니</span>
+            </div>
+            <span class="class-status-badge upcoming">대기 (시작 20분 전)</span>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script src="app.js"></script>
+  <!-- Vercel Web Analytics -->
+  <script defer src="/_vercel/insights/script.js"></script>
+</body>
+</html>
